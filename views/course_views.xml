@@ -1,0 +1,126 @@
+<odoo>
+
+    <!-- Course List -->
+    <record id="view_course_list" model="ir.ui.view">
+    <field name="name">student.course.list</field>
+    <field name="model">student.course</field>
+    <field name="arch" type="xml">
+        <list>
+            <field name="name"/>
+            <field name="duration"/>
+        </list>
+    </field>
+</record>
+    <record id="view_course_kanban" model="ir.ui.view">
+    <field name="name">student.course.kanban</field>
+    <field name="model">student.course</field>
+    <field name="arch" type="xml">
+        <kanban>
+
+            <field name="name"/>
+            <field name="student_count"/>
+            <field name="state"/>
+
+            <templates>
+                <t t-name="kanban-box">
+                    <div class="oe_kanban_card">
+
+                        <strong>
+                            <field name="name"/>
+                        </strong>
+
+                        <div>
+                            Students: <field name="student_count"/>
+                        </div>
+
+                        <div>
+                            Status: <field name="state"/>
+                        </div>
+
+                    </div>
+                </t>
+            </templates>
+
+        </kanban>
+    </field>
+</record>
+    <!-- Course Form -->
+    <record id="view_course_form" model="ir.ui.view">
+        <field name="name">student.course.form</field>
+        <field name="model">student.course</field>
+        <field name="arch" type="xml">
+           <form>
+           <header>
+
+    <button name="action_open_course"
+            type="object"
+            string="Open"
+            class="btn-primary"
+            invisible="state != 'draft'"/>
+
+    <button name="action_close_course"
+            type="object"
+            string="Close"
+            invisible="state != 'open'"/>
+
+    <button name="action_reset_draft"
+            type="object"
+            string="Reset to Draft"
+            invisible="state != 'closed'"/>
+
+    <field name="state" widget="statusbar"
+           statusbar_visible="draft,open,closed"/>
+
+</header>
+    <sheet>
+    <div class="oe_button_box" name="button_box">
+
+    <button type="object"
+            name="action_view_students"
+            class="oe_stat_button"
+            icon="fa-users">
+
+        <field name="student_count" widget="statinfo" string="Students"/>
+
+    </button>
+
+</div>
+       <group>
+    <field name="name"/>
+    <field name="teacher_id"/>
+    <field name="duration"/>
+    <field name="duration_unit"/>
+    <field name="capacity"/>
+    <field name="description"/>
+</group>
+        <notebook>
+    <page string="Students">
+        <field name="student_ids">
+            <list>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+            </list>
+        </field>
+    </page>
+</notebook>
+    </sheet>
+</form>
+        </field>
+    </record>
+    <menuitem id="menu_course"
+          name="Courses"
+          parent="student_menu_root"
+          sequence="20"/>
+
+<record id="action_course" model="ir.actions.act_window">
+    <field name="name">Courses</field>
+    <field name="res_model">student.course</field>
+   <field name="view_mode">kanban,list,form</field>
+</record>
+
+<menuitem id="menu_course_action"
+          parent="menu_course"
+          action="action_course"/>
+
+</odoo>
