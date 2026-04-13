@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Teacher List View -->
+    <record id="view_teacher_list" model="ir.ui.view">
+        <field name="name">teacher.teacher.list</field>
+        <field name="model">teacher.teacher</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="specialization"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Teacher Form View -->
+    <record id="view_teacher_form" model="ir.ui.view">
+        <field name="name">teacher.teacher.form</field>
+        <field name="model">teacher.teacher</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="email"/>
+                        <field name="phone"/>
+                        <field name="specialization"/>
+                        <field name="course_ids"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Teacher Menu -->
+    <menuitem id="menu_teacher"
+              name="Teachers"
+              parent="student_menu_root"
+              sequence="15"/>
+
+    <!-- Teacher Action -->
+    <record id="action_teacher" model="ir.actions.act_window">
+        <field name="name">Teachers</field>
+        <field name="res_model">teacher.teacher</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Teacher Menu Action -->
+    <menuitem id="menu_teacher_action"
+              parent="menu_teacher"
+              action="action_teacher"/>
+</odoo>

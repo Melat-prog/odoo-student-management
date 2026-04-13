@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Admission List View -->
+    <record id="view_admission_list" model="ir.ui.view">
+        <field name="name">admission.list</field>
+        <field name="model">admission.application</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="applied_class_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Admission Form View -->
+    <record id="view_admission_form" model="ir.ui.view">
+        <field name="name">admission.form</field>
+        <field name="model">admission.application</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit"
+                            type="object"
+                            string="Submit"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_approve"
+                            type="object"
+                            string="Approve"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_reject"
+                            type="object"
+                            string="Reject"
+                            invisible="state != 'submitted'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,approved,rejected"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="email"/>
+                        <field name="phone"/>
+                        <field name="applied_class_id"/>
+                    </group>
+                </sheet>
+                <sheet>
+    <group>
+        <field name="name"/>
+        <field name="teacher_id"/>
+        <field name="state"/>
+    </group>
+</sheet>
+<chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Admission Action -->
+    <record id="action_admission" model="ir.actions.act_window">
+        <field name="name">Admissions</field>
+        <field name="res_model">admission.application</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Admission Menu -->
+    <menuitem id="menu_admission"
+              name="Admissions"
+              parent="student_menu_root"
+              sequence="15"/>
+
+    <menuitem id="menu_admission_action"
+              parent="menu_admission"
+              action="action_admission"/>
+
+</odoo>

@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_student,student.student,model_student_student,,1,1,1,1
+access_course,access_course,model_student_course,,1,1,1,1
+access_teacher,access_teacher,model_teacher_teacher,,1,1,1,1
+access_student_attendance,access_student_attendance,model_student_attendance,,1,1,1,1
+access_class,access_class,model_student_class,,1,1,1,1
+access_admission,access_admission,model_admission_application,,1,1,1,1
+access_subject,access_subject,model_student_subject,,1,1,1,1
+access_assignment,access_assignment,model_teacher_assignment,,1,1,1,1
+access_student_submission,student.submission,model_student_submission,,1,1,1,1
