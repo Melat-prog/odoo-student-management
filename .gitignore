@@ -1,3 +1,19 @@
+# Environments & Cache
 odoo-venv/
+venv/
 __pycache__/
 *.pyc
+
+# Local secrets & credentials
+odoo.conf
+*.log
+nohup.out
+.env
+fix_passwords.py
+fix_users.py
+fix_melat.py
+
+# Odoo Core & Temp Scripts
+odoo/
+*.py
+!student_management/**

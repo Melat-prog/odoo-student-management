@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_menu_student" name="Portal layout : student menu entries" inherit_id="portal.portal_breadcrumbs" priority="20">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'grades'" t-attf-class="breadcrumb-item #{'active ' if not grade else ''}">
+                <a t-if="grade" t-attf-href="/my/grades?{{ keep_query() }}">Grades</a>
+                <t t-else="">Grades</t>
+            </li>
+            <li t-if="page_name == 'attendance'" t-attf-class="breadcrumb-item #{'active ' if not attendance else ''}">
+                <a t-if="attendance" t-attf-href="/my/attendance?{{ keep_query() }}">Attendance</a>
+                <t t-else="">Attendance</t>
+            </li>
+            <li t-if="page_name == 'assignments'" t-attf-class="breadcrumb-item #{'active ' if not assignment else ''}">
+                <a t-if="assignment" t-attf-href="/my/assignments?{{ keep_query() }}">Assignments</a>
+                <t t-else="">Assignments</t>
+            </li>
+            <li t-if="page_name == 'resources'" t-attf-class="breadcrumb-item #{'active ' if not resource else ''}">
+                <a t-if="resource" t-attf-href="/my/resources?{{ keep_query() }}">Resources</a>
+                <t t-else="">Resources</t>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_student" name="Show Student entries" inherit_id="portal.portal_my_home" priority="20">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <t t-set="portal_client_category_enable" t-value="True"/>
+        </xpath>
+        <xpath expr="//div[@id='portal_client_category']" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/student_management/static/src/img/grades.svg'"/>
+                <t t-set="title">Grades</t>
+                <t t-set="text">View your academic grades and GPA</t>
+                <t t-set="url" t-value="'/my/grades'"/>
+                <t t-set="placeholder_count" t-value="'grade_count'"/>
+                <t t-set="config_card" t-value="True"/>
+            </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/student_management/static/src/img/attendance.svg'"/>
+                <t t-set="title">Attendance</t>
+                <t t-set="text">Check your attendance records</t>
+                <t t-set="url" t-value="'/my/attendance'"/>
+                <t t-set="placeholder_count" t-value="'attendance_count'"/>
+                <t t-set="config_card" t-value="True"/>
+            </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/student_management/static/src/img/assignments.svg'"/>
+                <t t-set="title">Assignments</t>
+                <t t-set="text">View and track your assignments</t>
+                <t t-set="url" t-value="'/my/assignments'"/>
+                <t t-set="placeholder_count" t-value="'assignment_count'"/>
+                <t t-set="config_card" t-value="True"/>
+            </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/student_management/static/src/img/resources.svg'"/>
+                <t t-set="title">Learning Resources</t>
+                <t t-set="text">Browse course materials and resources</t>
+                <t t-set="url" t-value="'/my/resources'"/>
+                <t t-set="placeholder_count" t-value="'resource_count'"/>
+                <t t-set="config_card" t-value="True"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_student_not_found" name="Student Not Found">
+        <t t-call="website.layout">
+            <div class="container mt-5">
+                <div class="alert alert-warning text-center">
+                    <h3>No Student Record Found</h3>
+                    <p>We could not find a student record associated with your account. Please contact the administration.</p>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_student_dashboard" name="Student Dashboard">
+        <t t-call="website.layout">
+            <div class="container mt-4 mb-5">
+                <div class="row">
+                    <!-- Sidebar Profile -->
+                    <div class="col-md-3">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body text-center">
+                                <t t-if="student.image_1920">
+                                    <img t-attf-src="data:image/png;base64,{{ student.image_1920 }}" class="rounded-circle img-fluid mb-3" style="max-height:150px;"/>
+                                </t>
+                                <t t-else="">
+                                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mb-3 mx-auto" style="width: 150px; height: 150px;">
+                                        <i class="fa fa-user fa-4x text-muted"></i>
+                                    </div>
+                                </t>
+                                <h4 class="card-title font-weight-bold"><t t-esc="student.name"/></h4>
+                                <p class="text-muted mb-1"><t t-esc="student.student_id"/></p>
+                                <p class="badge bg-primary text-white"><t t-esc="student.course_id.name"/></p>
+                                <p class="badge bg-info text-white"><t t-esc="student.class_id.name"/></p>
+                                <hr/>
+                                <div><strong>CGPA:</strong> <t t-esc="student.cgpa"/></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div class="col-md-9">
+                        <div class="card shadow-sm border-0 mb-4">
+                            <div class="card-header bg-white">
+                                <h4 class="mb-0">Recent Attendance</h4>
+                            </div>
+                            <div class="card-body p-0">
+                                <table class="table table-hover mb-0">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Session</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="attendance" t-as="att">
+                                            <td><t t-esc="att.date"/></td>
+                                            <td><t t-esc="dict(att._fields['session'].selection).get(att.session)"/></td>
+                                            <td>
+                                                <span t-attf-class="badge bg-{{ 'success' if att.status == 'present' else 'danger' if att.status == 'absent' else 'warning' }}">
+                                                    <t t-esc="dict(att._fields['status'].selection).get(att.status)"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card shadow-sm border-0 mb-4 h-100">
+                                    <div class="card-header bg-white">
+                                        <h4 class="mb-0">Active Assignments</h4>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item" t-foreach="assignments" t-as="assign">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h6 class="mb-1"><t t-esc="assign.name"/></h6>
+                                                <small class="text-danger" t-if="assign.due_date">Due: <t t-esc="assign.due_date"/></small>
+                                            </div>
+                                            <p class="mb-1 text-muted small"><t t-esc="assign.subject_id.name"/></p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="card shadow-sm border-0 mb-4 h-100">
+                                    <div class="card-header bg-white">
+                                        <h4 class="mb-0">Learning Resources</h4>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item" t-foreach="resources" t-as="res">
+                                            <div class="d-flex align-items-center">
+                                                <i t-attf-class="fa {{ 'fa-file-pdf-o text-danger' if res.resource_type == 'document' else 'fa-youtube-play text-danger' if res.resource_type == 'video' else 'fa-link text-primary' }} me-3 fa-2x"></i>
+                                                <div>
+                                                    <h6 class="mb-0"><t t-esc="res.name"/></h6>
+                                                    <small class="text-muted"><t t-esc="res.subject_id.name or res.course_id.name"/></small>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_my_grades" name="My Grades">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Grades</t>
+            </t>
+            <t t-if="not grades">
+                <p>There are currently no grades for your account.</p>
+            </t>
+            <t t-if="grades" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Subject</th>
+                        <th>Exam / Assignment</th>
+                        <th class="text-end">Marks</th>
+                        <th class="text-end">Grade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="grades" t-as="grade">
+                        <tr>
+                            <td><t t-esc="grade.subject_id.name"/></td>
+                            <td><t t-esc="grade.name"/></td>
+                            <td class="text-end"><t t-esc="grade.marks"/></td>
+                            <td class="text-end"><span class="badge bg-primary"><t t-esc="grade.grade"/></span></td>
+                        </tr>
+                    </t>
+                </tbody>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_my_attendance" name="My Attendance">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Attendance</t>
+            </t>
+            <t t-if="not attendances">
+                <p>There are currently no attendance records for your account.</p>
+            </t>
+            <t t-if="attendances" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Date</th>
+                        <th>Session</th>
+                        <th class="text-end">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="attendances" t-as="att">
+                        <tr>
+                            <td><t t-esc="att.date"/></td>
+                            <td><t t-esc="att.session"/></td>
+                            <td class="text-end">
+                                <span t-attf-class="badge bg-{{ 'success' if att.status == 'present' else 'danger' if att.status == 'absent' else 'warning' }}">
+                                    <t t-esc="dict(att._fields['status'].selection).get(att.status)"/>
+                                </span>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </t>
+        </t>
+    </template>
+    <template id="portal_my_assignments" name="My Assignments">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Assignments</t>
+            </t>
+            <t t-if="not assignments">
+                <p>There are currently no assignments for your account.</p>
+            </t>
+            <t t-if="assignments" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Title</th>
+                        <th>Subject</th>
+                        <th>Due Date</th>
+                        <th class="text-end">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="assignments" t-as="assign">
+                        <tr>
+                            <td><t t-esc="assign.name"/></td>
+                            <td><t t-esc="assign.subject_id.name"/></td>
+                            <td><span t-field="assign.due_date"/></td>
+                            <td class="text-end">
+                                <span t-attf-class="badge bg-{{ 'success' if assign.state == 'completed' else 'warning' if assign.state == 'in_progress' else 'info' }}">
+                                    <t t-esc="dict(assign._fields['state'].selection).get(assign.state)"/>
+                                </span>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_my_resources" name="My Learning Resources">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Learning Resources</t>
+            </t>
+            <t t-if="not resources">
+                <p>There are currently no learning resources available for your account.</p>
+            </t>
+            <t t-if="resources" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Type</th>
+                        <th>Title</th>
+                        <th>Subject/Course</th>
+                        <th class="text-end">Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="resources" t-as="res">
+                        <tr>
+                            <td>
+                                <i t-attf-class="fa {{ 'fa-file-pdf-o text-danger' if res.resource_type == 'document' else 'fa-youtube-play text-danger' if res.resource_type == 'video' else 'fa-link text-primary' }} me-2"></i>
+                                <t t-esc="dict(res._fields['resource_type'].selection).get(res.resource_type)"/>
+                            </td>
+                            <td><t t-esc="res.name"/></td>
+                            <td><t t-esc="res.subject_id.name or res.course_id.name"/></td>
+                            <td class="text-end">
+                                <a t-if="res.url" t-att-href="res.url" target="_blank" class="btn btn-sm btn-primary">Open Link</a>
+                                <a t-if="res.file_attachment" t-attf-href="/web/content/student.learning.resource/{{res.id}}/file_attachment" target="_blank" class="btn btn-sm btn-info text-white">Download</a>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </t>
+        </t>
+    </template>
+    <template id="portal_teacher_dashboard" name="Teacher Dashboard">
+        <t t-call="website.layout">
+            <div class="container mt-4 mb-5">
+                <div class="row">
+                    <!-- Sidebar Profile -->
+                    <div class="col-md-3">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body text-center">
+                                <t t-if="teacher.image_1920">
+                                    <img t-attf-src="data:image/png;base64,{{ teacher.image_1920 }}" class="rounded-circle img-fluid mb-3" style="max-height:150px;"/>
+                                </t>
+                                <t t-else="">
+                                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mb-3 mx-auto" style="width: 150px; height: 150px;">
+                                        <i class="fa fa-user fa-4x text-muted"></i>
+                                    </div>
+                                </t>
+                                <h4 class="card-title font-weight-bold"><t t-esc="teacher.name"/></h4>
+                                <p class="text-muted mb-1"><t t-esc="teacher.specialization"/></p>
+                                <hr/>
+                                <div><i class="fa fa-envelope me-2"></i> <t t-esc="teacher.email"/></div>
+                                <div><i class="fa fa-phone me-2"></i> <t t-esc="teacher.phone"/></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div class="col-md-9">
+                        <div class="card shadow-sm border-0 mb-4">
+                            <div class="card-header bg-white">
+                                <h4 class="mb-0">My Assignments</h4>
+                            </div>
+                            <div class="card-body p-0">
+                                <table class="table table-hover mb-0">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Class</th>
+                                            <th>Subject</th>
+                                            <th>Due Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="assignments" t-as="assign">
+                                            <td><t t-esc="assign.name"/></td>
+                                            <td><t t-esc="assign.class_id.name"/></td>
+                                            <td><t t-esc="assign.subject_id.name"/></td>
+                                            <td><t t-esc="assign.due_date"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card shadow-sm border-0 mb-4">
+                            <div class="card-header bg-white">
+                                <h4 class="mb-0">My Timetable</h4>
+                            </div>
+                            <div class="card-body p-0">
+                                <table class="table table-hover mb-0">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th>Day</th>
+                                            <th>Time</th>
+                                            <th>Class</th>
+                                            <th>Subject</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="teacher.schedule_ids" t-as="schedule">
+                                            <td><t t-esc="dict(schedule._fields['day'].selection).get(schedule.day)"/></td>
+                                            <td><t t-esc="schedule.start_time"/> - <t t-esc="schedule.end_time"/></td>
+                                            <td><t t-esc="schedule.class_id.name"/></td>
+                                            <td><t t-esc="schedule.subject_id.name"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_parent_dashboard" name="Parent Dashboard">
+        <t t-call="website.layout">
+            <div class="container mt-4 mb-5">
+                <div class="row">
+                    <!-- Sidebar Profile -->
+                    <div class="col-md-3">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body text-center">
+                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mb-3 mx-auto" style="width: 150px; height: 150px;">
+                                    <i class="fa fa-users fa-4x text-muted"></i>
+                                </div>
+                                <h4 class="card-title font-weight-bold"><t t-esc="parent.name"/></h4>
+                                <p class="text-muted mb-1"><t t-esc="dict(parent._fields['relationship'].selection).get(parent.relationship)"/></p>
+                                <hr/>
+                                <div><i class="fa fa-envelope me-2"></i> <t t-esc="parent.email"/></div>
+                                <div><i class="fa fa-phone me-2"></i> <t t-esc="parent.phone"/></div>
+                            </div>
+                        </div>
+                        
+                        <div class="card shadow-sm border-0 mt-3">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0">Quick Links</h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="list-group list-group-flush">
+                                    <a href="/my/invoices" class="list-group-item list-group-item-action">
+                                        <i class="fa fa-file-text-o me-2"></i> Tuition Invoices
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div class="col-md-9">
+                        <div class="row">
+                            <t t-foreach="children" t-as="child">
+                                <div class="col-md-6 mb-4">
+                                    <div class="card shadow-sm border-0 h-100">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <t t-if="child.image_1920">
+                                                    <img t-attf-src="data:image/png;base64,{{ child.image_1920 }}" class="rounded-circle me-3" style="width: 64px; height: 64px; object-fit: cover;"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-3" style="width: 64px; height: 64px;">
+                                                        <i class="fa fa-user text-muted"></i>
+                                                    </div>
+                                                </t>
+                                                <div>
+                                                    <h5 class="mb-0"><t t-esc="child.name"/></h5>
+                                                    <small class="text-muted"><t t-esc="child.student_id"/></small>
+                                                </div>
+                                            </div>
+                                            <p class="mb-1"><strong>Course:</strong> <t t-esc="child.course_id.name"/></p>
+                                            <p class="mb-1"><strong>Class:</strong> <t t-esc="child.class_id.name"/></p>
+                                            <p class="mb-3"><strong>CGPA:</strong> <span class="badge bg-primary"><t t-esc="child.cgpa"/></span></p>
+                                            
+                                            <div class="d-flex gap-2">
+                                                <a t-attf-href="/my/grades?student_id={{child.id}}" class="btn btn-sm btn-outline-primary">Grades</a>
+                                                <a t-attf-href="/my/attendance?student_id={{child.id}}" class="btn btn-sm btn-outline-info">Attendance</a>
+                                                <a t-attf-href="/my/assignments?student_id={{child.id}}" class="btn btn-sm btn-outline-secondary">Assignments</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

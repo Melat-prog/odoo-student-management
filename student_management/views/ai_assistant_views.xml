@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_student_ai_assistant_form" model="ir.ui.view">
+        <field name="name">student.ai.assistant.form</field>
+        <field name="model">student.ai.assistant</field>
+        <field name="arch" type="xml">
+            <form string="AI Learning Assistant">
+                <header>
+                    <button name="action_generate" type="object" string="Generate Output" class="btn-primary" invisible="state == 'done'"/>
+                    <button name="action_save_to_record" type="object" string="Save to Record" class="btn-success" invisible="state != 'done'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,processing,done"/>
+                </header>
+                <sheet>
+                    <field name="res_model" invisible="1"/>
+                    <field name="res_id" invisible="1"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Summarize Chapter 4"/></h1>
+                    </div>
+                    <group>
+                        <group string="Source Material">
+                            <field name="resource_id" options="{'no_create': True}"/>
+                            <field name="file_attachment" filename="file_name"/>
+                            <field name="file_name" invisible="1"/>
+                            <field name="custom_text" placeholder="Paste text here or leave blank to use attached document..."/>
+                        </group>
+                        <group string="AI Configuration">
+                            <field name="action_type" widget="radio"/>
+                            <field name="difficulty" widget="radio" invisible="action_type not in ('mcq', 'short_q')"/>
+                            <field name="student_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook invisible="state != 'done'">
+                        <page string="Generated Result">
+                            <field name="generated_content" widget="html" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_student_ai_assistant" model="ir.actions.act_window">
+        <field name="name">AI Learning Assistant</field>
+        <field name="res_model">student.ai.assistant</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_student_ai_assistant_form"/>
+        <field name="target">new</field>
+        <field name="context">{'form_view_initial_mode': 'edit'}</field>
+    </record>
+
+    <!-- Adding to Student Menu -->
+    <menuitem id="menu_student_learning_root" name="Learning Workspace" parent="student_menu_root" sequence="25"/>
+    <menuitem id="menu_ai_assistant" name="AI Assistant" parent="menu_student_learning_root" action="action_student_ai_assistant" sequence="10"/>
+
+</odoo>

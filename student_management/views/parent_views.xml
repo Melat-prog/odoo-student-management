@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_student_parent_list" model="ir.ui.view">
+        <field name="name">student.parent.list</field>
+        <field name="model">student.parent</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="relationship"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="student_ids" widget="many2many_tags"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_student_parent_search" model="ir.ui.view">
+        <field name="name">student.parent.search</field>
+        <field name="model">student.parent</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="student_ids"/>
+                <group expand="0" string="Group By">
+                    <filter string="Relationship" name="group_by_relationship" context="{'group_by': 'relationship'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_student_parent_form" model="ir.ui.view">
+        <field name="name">student.parent.form</field>
+        <field name="model">student.parent</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_create_user" type="object" string="Create Portal Account" invisible="user_id != False" groups="student_management.group_student_manager"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Parent Name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Contact Info">
+                            <field name="phone"/>
+                            <field name="email"/>
+                            <field name="address"/>
+                        </group>
+                        <group string="Details">
+                            <field name="relationship"/>
+                            <field name="user_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Linked Students">
+                            <field name="student_ids">
+                                <list>
+                                    <field name="student_id"/>
+                                    <field name="name"/>
+                                    <field name="course_id"/>
+                                    <field name="class_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_student_parent" model="ir.actions.act_window">
+        <field name="name">Parents / Guardians</field>
+        <field name="res_model">student.parent</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Adding to Student Menu Root -->
+    <menuitem id="menu_student_parent" name="Parents" parent="student_menu_root" action="action_student_parent" sequence="20"/>
+</odoo>

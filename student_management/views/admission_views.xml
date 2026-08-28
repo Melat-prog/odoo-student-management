@@ -1,18 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
+    <!-- Admission Search View -->
+    <record id="view_admission_search" model="ir.ui.view">
+        <field name="name">admission.search</field>
+        <field name="model">admission.application</field>
+        <field name="arch" type="xml">
+            <search string="Search Admissions">
+                <field name="name" string="Applicant Name"/>
+                <field name="reference" string="Reference"/>
+                <field name="email"/>
+                <field name="applied_class_id"/>
+                <separator/>
+                <filter string="Applicants" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Under Review" name="filter_review" domain="[('state', '=', 'review')]"/>
+                <filter string="Accepted" name="filter_accepted" domain="[('state', '=', 'accepted')]"/>
+                <filter string="Rejected" name="filter_rejected" domain="[('state', '=', 'rejected')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Applied Class" name="group_class" context="{'group_by': 'applied_class_id'}"/>
+                    <filter string="Application Date" name="group_date" context="{'group_by': 'application_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <!-- Admission List View -->
     <record id="view_admission_list" model="ir.ui.view">
         <field name="name">admission.list</field>
         <field name="model">admission.application</field>
         <field name="arch" type="xml">
-            <list>
+            <list decoration-success="state == 'accepted'" decoration-danger="state == 'rejected'" decoration-info="state == 'review'">
+                <field name="reference"/>
                 <field name="name"/>
                 <field name="email"/>
                 <field name="phone"/>
                 <field name="applied_class_id"/>
-                <field name="state"/>
+                <field name="application_date"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'review'"
+                       decoration-success="state == 'accepted'"
+                       decoration-danger="state == 'rejected'"/>
             </list>
+        </field>
+    </record>
+
+    <!-- Admission Kanban View -->
+    <record id="view_admission_kanban" model="ir.ui.view">
+        <field name="name">admission.kanban</field>
+        <field name="model">admission.application</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" default_group_by="state">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="reference"/>
+                <field name="email"/>
+                <field name="applied_class_id"/>
+                <field name="application_date"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title"><field name="name"/></strong>
+                                <div class="text-muted">
+                                    <field name="reference"/>
+                                </div>
+                                <div>
+                                    <field name="applied_class_id"/>
+                                </div>
+                                <div class="text-muted">
+                                    <field name="email"/>
+                                </div>
+                                <div class="mt-1">
+                                    <field name="application_date"/>
+                                </div>
+                                <div>
+                                    <field name="state" widget="label_selection" options="{'classes': {'draft': 'default', 'review': 'info', 'accepted': 'success', 'rejected': 'danger'}}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
         </field>
     </record>
 
@@ -25,36 +96,62 @@
                 <header>
                     <button name="action_submit"
                             type="object"
-                            string="Submit"
+                            string="Submit for Review"
                             class="btn-primary"
                             invisible="state != 'draft'"/>
-                    <button name="action_approve"
+                    <button name="action_accept"
                             type="object"
-                            string="Approve"
-                            invisible="state != 'submitted'"/>
+                            string="Accept &amp; Enroll"
+                            class="btn-success"
+                            invisible="state != 'review'"/>
                     <button name="action_reject"
                             type="object"
                             string="Reject"
-                            invisible="state != 'submitted'"/>
+                            class="btn-danger"
+                            invisible="state != 'review'"/>
+                    <button name="action_reset_to_draft"
+                            type="object"
+                            string="Reset to Draft"
+                            class="btn-secondary"
+                            invisible="state in ('draft', 'accepted')"/>
                     <field name="state" widget="statusbar"
-                           statusbar_visible="draft,submitted,approved,rejected"/>
+                           statusbar_visible="draft,review,accepted,rejected"/>
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_student"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-user"
+                                invisible="not student_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Student Record</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Applicant Name"/></h1>
+                        <h3 class="text-muted"><field name="reference" readonly="1"/></h3>
+                    </div>
                     <group>
-                        <field name="name"/>
-                        <field name="email"/>
-                        <field name="phone"/>
-                        <field name="applied_class_id"/>
+                        <group string="Applicant Details">
+                            <field name="email" widget="email"/>
+                            <field name="phone" widget="phone"/>
+                            <field name="application_date"/>
+                        </group>
+                        <group string="Admission Info">
+                            <field name="applied_class_id"/>
+                            <field name="teacher_id"/>
+                            <field name="student_id" readonly="1"/>
+                        </group>
                     </group>
+                    <notebook>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Additional notes about this application..."/>
+                        </page>
+                    </notebook>
                 </sheet>
-                <sheet>
-    <group>
-        <field name="name"/>
-        <field name="teacher_id"/>
-        <field name="state"/>
-    </group>
-</sheet>
-<chatter/>
+                <chatter/>
             </form>
         </field>
     </record>
@@ -63,17 +160,22 @@
     <record id="action_admission" model="ir.actions.act_window">
         <field name="name">Admissions</field>
         <field name="res_model">admission.application</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="view_admission_search"/>
+        <field name="context">{'search_default_filter_draft': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first admission application
+            </p>
+            <p>Track student admissions from application to enrollment.</p>
+        </field>
     </record>
 
     <!-- Admission Menu -->
-    <menuitem id="menu_admission"
-              name="Admissions"
-              parent="student_menu_root"
-              sequence="15"/>
-
-    <menuitem id="menu_admission_action"
-              parent="menu_admission"
-              action="action_admission"/>
+   <menuitem id="menu_admission"
+          name="Admissions"
+          parent="menu_operations_root"
+          action="action_admission"
+          sequence="40"/>
 
 </odoo>

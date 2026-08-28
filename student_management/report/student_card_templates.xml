@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_enrollment_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: 'Helvetica'; color: #333;">
+                        <div class="row mb-4">
+                            <div class="col-8">
+                                <h1 style="color: #1A5276;">Enrollment Confirmation</h1>
+                                <p class="text-muted">Issued on: <span t-esc="datetime.date.today()"/></p>
+                            </div>
+                            <div class="col-4 text-end">
+                                <t t-if="o.image_1920">
+                                    <img t-att-src="image_data_uri(o.image_1920)" 
+                                         style="max-height: 140px; border: 2px solid #1A5276; padding: 2px;"/>
+                                </t>
+                            </div>
+                        </div>
+
+                        <div style="border-top: 2px solid #1A5276; padding-top: 20px;">
+                            <h4>To Whom It May Concern,</h4>
+                            <p>This is to certify that the following student is officially enrolled for the current academic session.</p>
+                        </div>
+
+                        <table class="table table-bordered mt-4">
+                            <tr style="background-color: #F4F6F7;">
+                                <th width="30%">Full Name</th>
+                                <td><span t-field="o.name"/></td>
+                            </tr>
+                            <tr>
+                                <th>Student ID</th>
+                                <td><span t-field="o.student_id"/></td>
+                            </tr>
+                            <tr>
+                                <th>Department/Course</th>
+                                <td><span t-field="o.course_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <th>Enrollment Status</th>
+                                <td>
+                                    <span t-if="o.state == 'enrolled'" class="text-success">Confirmed</span>
+                                    <span t-else="" t-field="o.state"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div class="mt-5">
+                            <p><strong>Note:</strong> This document serves as official proof of enrollment. Any alterations to this document will render it void.</p>
+                        </div>
+
+                        <div class="row mt-5 pt-5">
+                            <div class="col-6">
+                                <p style="border-top: 1px solid #000; width: 200px; text-align: center;">Registrar Signature</p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p style="display: inline-block; border-top: 1px solid #000; width: 200px; text-align: center;">University Stamp</p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+   <template id="report_student_card_template"> 
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center">
+                            <h2>Academic Transcript</h2>
+                            <hr/>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>Name: </strong> <span t-field="o.name"/><br/>
+                                <strong>ID: </strong> <span t-field="o.student_id"/><br/>
+                                <strong>Course: </strong> <span t-field="o.course_id.name"/>
+                            </div>
+                            <div class="col-6 text-right">
+                                <strong>Date: </strong> <span t-esc="datetime.datetime.now().strftime('%Y-%m-%d')"/>
+                                <h3 class="text-primary">CGPA: <span t-field="o.cgpa"/></h3>
+                            </div>
+                        </div>
+
+                        <br/>
+                        <h4>Exam Results</h4>
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Exam Title</th>
+                                    <th>Type</th>
+                                    <th>Marks</th>
+                                    <th>Grade</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.exam_line_ids" t-as="line">
+                                    <tr>
+                                        <td><span t-field="line.name"/></td>
+                                        <td><span t-field="line.exam_type"/></td>
+                                        <td><span t-field="line.marks"/> / <span t-field="line.max_marks"/></td>
+                                        <td><strong><span t-field="line.grade"/></strong></td>
+                                        <td>
+                                            <span t-if="line.result_status == 'pass'" class="badge badge-success">PASS</span>
+                                            <span t-if="line.result_status == 'fail'" class="badge badge-danger">FAIL</span>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

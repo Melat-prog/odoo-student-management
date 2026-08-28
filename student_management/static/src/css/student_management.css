@@ -1,0 +1,96 @@
+/* Student Management Module - Custom Styles */
+
+/* Dashboard Cards */
+.o_student_dashboard .card {
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.o_student_dashboard .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Status Badges */
+.badge-draft {
+    background-color: #6c757d;
+    color: #fff;
+}
+.badge-enrolled {
+    background-color: #198754;
+    color: #fff;
+}
+.badge-graduated {
+    background-color: #0d6efd;
+    color: #fff;
+}
+.badge-suspended {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+/* Attendance Status */
+.o_attendance_present {
+    color: #198754;
+    font-weight: bold;
+}
+.o_attendance_absent {
+    color: #dc3545;
+    font-weight: bold;
+}
+.o_attendance_late {
+    color: #ffc107;
+    font-weight: bold;
+}
+
+/* Portal Student Profile Card */
+.o_student_portal_profile .rounded-circle {
+    border: 3px solid #0d6efd;
+}
+
+/* Grade Highlights */
+.o_grade_pass {
+    color: #198754;
+}
+.o_grade_fail {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Notice Board */
+.o_notice_urgent {
+    border-left: 4px solid #dc3545;
+    background-color: #fff5f5;
+}
+.o_notice_info {
+    border-left: 4px solid #0d6efd;
+    background-color: #f0f7ff;
+}
+
+/* Form View Enhancements */
+.o_student_form .o_group .o_inner_group {
+    min-width: 250px;
+}
+
+/* Smooth transitions for tree views */
+.o_list_view .o_data_row {
+    transition: background-color 0.15s ease;
+}
+.o_list_view .o_data_row:hover {
+    background-color: #f8f9fa;
+}
+
+/* Dashboard stat buttons */
+.o_student_stat_button {
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+.o_student_stat_button:hover {
+    transform: scale(1.05);
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .o_student_dashboard .row .col-md-3 {
+        margin-bottom: 1rem;
+    }
+}

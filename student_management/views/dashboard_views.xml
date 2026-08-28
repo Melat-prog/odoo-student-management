@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Grade Reporting -->
+    <record id="view_student_grade_graph" model="ir.ui.view">
+        <field name="name">student.grade.graph</field>
+        <field name="model">student.grade</field>
+        <field name="arch" type="xml">
+            <graph string="Student Grades" type="bar">
+                <field name="subject_id"/>
+                <field name="marks" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_student_grade_pivot" model="ir.ui.view">
+        <field name="name">student.grade.pivot</field>
+        <field name="model">student.grade</field>
+        <field name="arch" type="xml">
+            <pivot string="Grade Analysis">
+                <field name="subject_id" type="row"/>
+                <field name="student_id" type="row"/>
+                <field name="marks" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Attendance Reporting -->
+    <record id="view_student_attendance_graph" model="ir.ui.view">
+        <field name="name">student.attendance.graph</field>
+        <field name="model">student.attendance</field>
+        <field name="arch" type="xml">
+            <graph string="Attendance Analysis" type="pie">
+                <field name="status"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_student_attendance_pivot" model="ir.ui.view">
+        <field name="name">student.attendance.pivot</field>
+        <field name="model">student.attendance</field>
+        <field name="arch" type="xml">
+            <pivot string="Attendance Pivot">
+                <field name="class_id" type="row"/>
+                <field name="date" type="col" interval="month"/>
+                <field name="status" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Report Actions -->
+    <record id="action_report_grades" model="ir.actions.act_window">
+        <field name="name">Grade Analysis</field>
+        <field name="res_model">student.grade</field>
+        <field name="view_mode">graph,pivot,list</field>
+    </record>
+    
+    <record id="action_report_attendance" model="ir.actions.act_window">
+        <field name="name">Attendance Analysis</field>
+        <field name="res_model">student.attendance</field>
+        <field name="view_mode">graph,pivot,list</field>
+    </record>
+
+    <!-- Dashboard Form View -->
+    <record id="view_student_dashboard_form" model="ir.ui.view">
+        <field name="name">student.dashboard.form</field>
+        <field name="model">student.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Dashboard" create="false" edit="false">
+                <sheet>
+                    <div class="row">
+                        <div class="col-12">
+                            <h1 class="text-center mb-4">Management Dashboard</h1>
+                        </div>
+                    </div>
+                    <div class="row text-center mb-4">
+                        <div class="col-md-3">
+                            <button type="object" name="action_view_students" class="btn btn-outline-primary w-100 h-100 p-4">
+                                <h1><field name="student_count"/></h1>
+                                <h4>Students</h4>
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="object" name="action_view_teachers" class="btn btn-outline-info w-100 h-100 p-4">
+                                <h1><field name="teacher_count"/></h1>
+                                <h4>Teachers</h4>
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="object" name="action_view_courses" class="btn btn-outline-success w-100 h-100 p-4">
+                                <h1><field name="course_count"/></h1>
+                                <h4>Courses</h4>
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="object" name="action_view_submissions" class="btn btn-outline-warning w-100 h-100 p-4">
+                                <h1><field name="pending_submissions"/></h1>
+                                <h4>Pending Submissions</h4>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-md-6 offset-md-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h1 class="display-4 text-success"><field name="attendance_percentage" widget="percentage"/></h1>
+                                    <h4 class="text-muted">Overall Attendance</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_student_dashboard" model="ir.actions.server">
+        <field name="name">Dashboard</field>
+        <field name="model_id" ref="student_management.model_student_dashboard"/>
+        <field name="state">code</field>
+        <field name="code">
+# Create a transient record and open its form
+dashboard = env['student.dashboard'].create({})
+action = {
+    'type': 'ir.actions.act_window',
+    'name': 'Dashboard',
+    'res_model': 'student.dashboard',
+    'res_id': dashboard.id,
+    'view_mode': 'form',
+    'target': 'current',
+}
+        </field>
+    </record>
+
+    <!-- Menus -->
+    <menuitem id="menu_dashboard_main" name="Dashboard" parent="student_menu_root" action="action_student_dashboard" sequence="5"/>
+    
+    <menuitem id="menu_reporting_root" name="Reporting" parent="student_menu_root" sequence="90"/>
+    <menuitem id="menu_report_grades" name="Grades" parent="menu_reporting_root" action="action_report_grades" sequence="10"/>
+    <menuitem id="menu_report_attendance" name="Attendance" parent="menu_reporting_root" action="action_report_attendance" sequence="20"/>
+
+</odoo>

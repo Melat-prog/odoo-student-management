@@ -1,6 +1,4 @@
 <odoo>
-
-    <!-- Student List View -->
     <record id="view_student_list" model="ir.ui.view">
         <field name="name">student.list</field>
         <field name="model">student.student</field>
@@ -8,221 +6,398 @@
             <list>
                 <field name="student_id"/>
                 <field name="name"/>
-                <field name="age"/>
-                <field name="email"/>
-                <field name="phone"/>
+                <field name="course_id"/>
+                <field name="class_id" widget="badge" decoration-info="1"/> 
+                <field name="cgpa"/>
+                <field name="payment_status" widget="badge" 
+                       decoration-info="payment_status == 'draft'" 
+                       decoration-warning="payment_status == 'partial'" 
+                       decoration-success="payment_status == 'paid'"/>
             </list>
         </field>
     </record>
 
-    <!-- Student Form View -->
+    <record id="view_student_kanban" model="ir.ui.view">
+        <field name="name">student.kanban</field>
+        <field name="model">student.student</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" default_group_by="state">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="student_id"/>
+                <field name="image_1920"/>
+                <field name="class_id"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill">
+                            <div class="o_kanban_image">
+                                <img t-att-src="kanban_image('student.student', 'image_1920', record.id.raw_value)" alt="Student" class="o_image_64_cover"/>
+                            </div>
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title"><field name="name"/></strong>
+                                <div class="o_kanban_record_subtitle">
+                                    <field name="student_id"/>
+                                </div>
+                                <div>
+                                    <field name="class_id"/>
+                                </div>
+                                <div>
+                                    <field name="state" widget="label_selection" options="{'classes': {'applicant': 'default', 'enrolled': 'success', 'promoted': 'info', 'graduated': 'primary'}}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <record id="view_student_form" model="ir.ui.view">
         <field name="name">student.form</field>
         <field name="model">student.student</field>
         <field name="arch" type="xml">
             <form>
-
                 <header>
-    <button name="action_enroll"
-            type="object"
-            string="Enroll"
-            class="btn-primary"
-            invisible="state != 'applicant'"/>
-    <button name="action_promote"
-            type="object"
-            string="Promote"
-            invisible="state != 'enrolled'"/>
-    <button name="action_graduate"
-            type="object"
-            string="Graduate"
-            invisible="state != 'promoted'"/>
-    <button name="action_set_applicant"
-            type="object"
-            string="Reset to Draft"
-            class="btn-secondary"
-            invisible="state == 'applicant'"/>
-
-    <field name="state" widget="statusbar"
-           statusbar_visible="applicant,enrolled,promoted,graduated"/>
-</header>
+                    <button name="action_enroll" type="object" string="Enroll" class="btn-primary" invisible="state != 'applicant'"/>
+                    <button name="action_promote" type="object" string="Promote" invisible="state != 'enrolled'"/>
+                    <button name="action_graduate" type="object" string="Graduate" invisible="state != 'promoted'"/>
+                    <button name="action_create_user" type="object" string="Create Portal Account" invisible="user_id != False" groups="student_management.group_student_manager"/>
+                    <button name="action_set_applicant" type="object" string="Reset to Draft" class="btn-secondary" invisible="state == 'applicant'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="applicant,enrolled,promoted,graduated"/>
+                </header>
                 <sheet>
-
-                    <group>
-                        <field name="student_id" readonly="1"/>
-                    </group>
-
                     <div class="oe_button_box" name="button_box">
-
-                        <button name="action_view_attendance"
-                                type="object"
-                                class="oe_stat_button"
-                                icon="fa-calendar">
+                        <button name="action_view_attendance" type="object" class="oe_stat_button" icon="fa-calendar">
                             <field name="attendance_count" widget="statinfo" string="Attendance"/>
                         </button>
-
-                        <button name="action_view_attendance"
-                                type="object"
-                                class="oe_stat_button"
-                                icon="fa-check">
-                            <field name="present_count" widget="statinfo" string="Present"/>
+                        <button name="action_view_grades" type="object" class="oe_stat_button" icon="fa-graduation-cap">
+                            <field name="cgpa" widget="statinfo" string="CGPA"/>
                         </button>
-
-                        <button name="action_view_attendance"
-                                type="object"
-                                class="oe_stat_button"
-                                icon="fa-times">
-                            <field name="absent_count" widget="statinfo" string="Absent"/>
+                        <button name="action_view_assignments" type="object" class="oe_stat_button" icon="fa-tasks">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Assignments</span>
+                            </div>
                         </button>
-
+                        <button name="action_view_resources" type="object" class="oe_stat_button" icon="fa-book">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Resources</span>
+                            </div>
+                        </button>
+                        <button name="action_view_invoices" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Invoices</span>
+                            </div>
+                        </button>
                     </div>
-
-                    <group string="Student Info">
-                        <group>
-                            <field name="name"/>
+                    <field name="image_1920" widget="image" class="oe_avatar" options='{"preview_image": "image_1920"}'/>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Name"/></h1>
+                        <h3><field name="student_id"/></h3>
+                    </div>
+                    <group>
+                        <group string="Personal Details">
                             <field name="age"/>
-                        </group>
-                        <group>
                             <field name="email"/>
                             <field name="phone"/>
                         </group>
+                        <group string="Academic Details">
+                            <field name="course_id"/>
+                            <field name="class_id" placeholder="Assign Class..."/> 
+                            <field name="enrollment_date"/>
+                            <field name="cgpa" readonly="1"/>
+                        </group>
                     </group>
-
-                    <group string="Course">
-                        <field name="course_id"/>
-                    </group>
-
                     <notebook>
-
-                        <page string="Attendance">
-                            <group string="Statistics">
+                        <page string="Attendance" name="attendance">
+                            <group>
                                 <group>
-                                    <field name="attendance_count" readonly="1"/>
-                                    <field name="present_count" readonly="1"/>
+                                    <field name="present_count"/>
+                                    <field name="absent_count"/>
                                 </group>
                                 <group>
-                                    <field name="absent_count" readonly="1"/>
                                     <field name="attendance_percentage" widget="progressbar"/>
                                 </group>
                             </group>
-
                             <field name="attendance_ids">
                                 <list editable="bottom">
                                     <field name="date"/>
-                                    <field name="course_id"/>
-                                    <field name="status"
-                                           decoration-success="status == 'present'"
-                                           decoration-danger="status == 'absent'"/>
+                                    <field name="status" widget="badge" decoration-success="status == 'present'" decoration-danger="status == 'absent'"/>
                                 </list>
                             </field>
                         </page>
-
-                        <page string="Notes">
-                            <field name="note"/>
+                        <page string="Finances" name="finances">
+                            <group>
+                                <group string="Fee Structure">
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="total_fees" widget="monetary"/>
+                                    <field name="amount_paid" widget="monetary"/>
+                                </group>
+                                <group string="Balance &amp; Status">
+                                    <field name="balance_amount" widget="monetary" decoration-danger="balance_amount &gt; 0"/>
+                                    <field name="payment_status" widget="badge" 
+                                           decoration-info="payment_status == 'draft'" 
+                                           decoration-warning="payment_status == 'partial'" 
+                                           decoration-success="payment_status == 'paid'"/>
+                                </group>
+                            </group>
                         </page>
-                        <page string="Enrollment History">
-    <group>
-        <field name="current_course_info" readonly="1"/>
-    </group>
-</page>
-
+                        <page string="Parents / Guardians" name="parents">
+                            <field name="parent_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="email"/>
+                                    <field name="phone"/>
+                                    <field name="relationship"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Internal Notes" name="notes">
+                            <field name="note" placeholder="Add private notes..."/>
+                        </page>
                     </notebook>
-
                 </sheet>
+                <chatter/>
             </form>
         </field>
     </record>
 
-    <!-- Student Kanban View -->
-    <record id="view_student_kanban" model="ir.ui.view">
-        <field name="name">student.kanban</field>
-        <field name="model">student.student</field>
-        <field name="arch" type="xml">
-            <kanban>
-
-                <field name="name"/>
-                <field name="student_id"/>
-                <field name="course_id"/>
-                <field name="attendance_percentage"/>
-
-                <templates>
-                    <t t-name="kanban-box">
-                        <div class="oe_kanban_card p-3">
-
-                            <strong>
-                                <field name="name"/>
-                            </strong>
-
-                            <div>
-                                <field name="student_id"/>
-                            </div>
-
-                            <br/>
-
-                            <div>
-                                Course:
-                                <field name="course_id"/>
-                            </div>
-
-                            <br/>
-
-                            <div>
-                                Attendance:
-                                <field name="attendance_percentage" widget="progressbar"/>
-                            </div>
-
-                        </div>
-                    </t>
-                </templates>
-
-            </kanban>
-        </field>
-    </record>
-
-    <!-- Search View -->
+    <!-- Student Search View -->
     <record id="view_student_search" model="ir.ui.view">
-        <field name="name">student.student.search</field>
+        <field name="name">student.search</field>
         <field name="model">student.student</field>
         <field name="arch" type="xml">
-            <search>
-                <field name="name"/>
+            <search string="Search Students">
+                <field name="name" string="Name"/>
+                <field name="student_id" string="Student ID"/>
                 <field name="course_id"/>
-
+                <field name="class_id"/>
+                <field name="email"/>
                 <separator/>
-
-                <filter name="has_attendance"
-                        string="Has Attendance"
-                        domain="[('attendance_ids','!=',False)]"/>
-
-                <filter name="no_attendance"
-                        string="No Attendance"
-                        domain="[('attendance_ids','=',False)]"/>
-
+                <filter string="Applicants" name="filter_applicant" domain="[('state', '=', 'applicant')]"/>
+                <filter string="Enrolled" name="filter_enrolled" domain="[('state', '=', 'enrolled')]"/>
+                <filter string="Promoted" name="filter_promoted" domain="[('state', '=', 'promoted')]"/>
+                <filter string="Graduated" name="filter_graduated" domain="[('state', '=', 'graduated')]"/>
+                <separator/>
+                <filter string="Unpaid" name="filter_unpaid" domain="[('payment_status', '=', 'draft')]"/>
+                <filter string="Partial Payment" name="filter_partial" domain="[('payment_status', '=', 'partial')]"/>
+                <filter string="Fully Paid" name="filter_paid" domain="[('payment_status', '=', 'paid')]"/>
+                <separator/>
                 <group expand="0" string="Group By">
-                    <filter name="group_by_course"
-                            string="Course"
-                            context="{'group_by': 'course_id'}"/>
+                    <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Course" name="group_course" context="{'group_by': 'course_id'}"/>
+                    <filter string="Class" name="group_class" context="{'group_by': 'class_id'}"/>
+                    <filter string="Payment Status" name="group_payment" context="{'group_by': 'payment_status'}"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <!-- Action -->
+
+
+    <record id="view_student_subject_list" model="ir.ui.view">
+        <field name="name">student.subject.list</field>
+        <field name="model">student.subject</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_student_subject_form" model="ir.ui.view">
+        <field name="name">student.subject.form</field>
+        <field name="model">student.subject</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="teacher_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description" name="description">
+                            <field name="description" placeholder="Subject description..."/>
+                        </page>
+                        <page string="Learning Resources" name="resources">
+                            <field name="resource_ids">
+                                <list>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="resource_type"/>
+                                    <field name="visibility"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_student_class_list" model="ir.ui.view">
+        <field name="name">student.class.list</field>
+        <field name="model">student.class</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="capacity"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_student_class_form" model="ir.ui.view">
+        <field name="name">student.class.form</field>
+        <field name="model">student.class</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Class Details">
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="capacity"/>
+                        </group>
+                        <group string="Academic Period">
+                            <field name="academic_year_id"/>
+                            <field name="term_id"/>
+                            <field name="grade_level_id"/>
+                            <field name="academic_year" string="Legacy Academic Year"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Students" name="students">
+                            <field name="student_ids">
+                                <list>
+                                    <field name="student_id"/>
+                                    <field name="name"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Subjects" name="subjects">
+                            <field name="subject_ids" widget="many2many_tags"/>
+                        </page>
+                        <page string="Schedule" name="schedule">
+                            <field name="schedule_ids">
+                                <list editable="bottom">
+                                    <field name="subject_id"/>
+                                    <field name="teacher_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_teacher_assignment_list" model="ir.ui.view">
+        <field name="name">student.teacher.assignment.list</field>
+        <field name="model">student.teacher.assignment</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="teacher_id"/>
+                <field name="subject_id"/>
+                <field name="class_id"/>
+                <field name="semester"/>
+                <field name="academic_year"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_teacher_assignment_form" model="ir.ui.view">
+        <field name="name">student.teacher.assignment.form</field>
+        <field name="model">student.teacher.assignment</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Core Allocations">
+                            <field name="teacher_id"/>
+                            <field name="subject_id"/>
+                            <field name="class_id"/>
+                        </group>
+                        <group string="Timing Parameters">
+                            <field name="semester"/>
+                            <field name="academic_year"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
     <record id="action_student" model="ir.actions.act_window">
         <field name="name">Students</field>
         <field name="res_model">student.student</field>
         <field name="view_mode">kanban,list,form</field>
-        <field name="search_view_id" ref="view_student_search"/>
     </record>
 
-    <!-- Menu -->
-    <menuitem id="student_menu_root"
-              name="Student Management"
-              sequence="10"/>
+    <record id="action_student_fees" model="ir.actions.act_window">
+        <field name="name">student payments</field>
+        <field name="res_model">student.student</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_payment_status': 'draft'}</field>
+    </record>
 
-    <menuitem id="student_menu_students"
-              name="Students"
-              parent="student_menu_root"
-              action="action_student"
-              sequence="10"/>
+    <record id="action_teacher_salary" model="ir.actions.act_window">
+        <field name="name">Teacher Salary</field>
+        <field name="res_model">teacher.salary</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <record id="action_student_subject" model="ir.actions.act_window">
+        <field name="name">Subjects</field>
+        <field name="res_model">student.subject</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_student_class" model="ir.actions.act_window">
+        <field name="name">Classes</field>
+        <field name="res_model">student.class</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_teacher_assignment" model="ir.actions.act_window">
+        <field name="name">Teacher Allocations</field>
+        <field name="res_model">student.teacher.assignment</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="student_menu_root" name="Student Management" sequence="1"/>
+    <menuitem id="menu_operations_root" name="Operations" parent="student_menu_root" sequence="10"/>
+    <menuitem id="menu_student_list_link" name="Students" parent="menu_operations_root" action="action_student" sequence="10"/>
+    <menuitem id="menu_academic_root" name="Academic" parent="student_menu_root" sequence="20"/>
+    
+    <menuitem id="menu_student_class_link" name="Classes" parent="menu_academic_root" action="action_student_class" sequence="10"/>
+    <menuitem id="menu_student_subject_link" name="Subjects" parent="menu_academic_root" action="action_student_subject" sequence="20"/>
+
+    <menuitem id="menu_exam_root" name="Exams" parent="student_menu_root" sequence="22"/>
+    
+    <menuitem id="menu_exam_session" name="Exam Sessions" parent="menu_exam_root" action="action_exam_session" sequence="5"/>
+    
+    <menuitem id="menu_exam_mid" name="Mid Exams" parent="menu_exam_root" action="action_exam_mid" sequence="10"/>
+    <menuitem id="menu_exam_final" name="Final Exams" parent="menu_exam_root" action="action_exam_final" sequence="20"/>
+    <menuitem id="menu_exam_exit" name="Exit Exams" parent="menu_exam_root" action="action_exam_exit" sequence="30"/>
+    
+    <menuitem id="menu_fees_top_bar" name="Fees" parent="student_menu_root" sequence="25"/>
+    <menuitem id="menu_student_fees_final" name="Student Payments" parent="menu_fees_top_bar" action="action_student_fees" sequence="10"/>
+    
+    <menuitem id="menu_teacher_salary_sub" name="Teacher Salary" parent="menu_fees_top_bar" action="action_teacher_salary" groups="student_management.group_student_manager" sequence="20"/>
+    
+    
+    <menuitem id="menu_teacher_assignment_sub" name="Teacher Allocations" parent="menu_teacher_work_root" action="action_teacher_assignment" sequence="5"/>
 
 </odoo>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Set the website homepage URL -->
+    <record id="website.default_website" model="website">
+        <field name="homepage_url">/</field>
+    </record>
+
+    <!-- Top Navbar Menus -->
+    <record id="menu_about_us" model="website.menu">
+        <field name="name">ABOUT US</field>
+        <field name="url">/about</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="menu_academics" model="website.menu">
+        <field name="name">ACADEMICS</field>
+        <field name="url">/academics</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="menu_courses" model="website.menu">
+        <field name="name">COURSES</field>
+        <field name="url">/courses</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">25</field>
+    </record>
+
+    <record id="menu_research" model="website.menu">
+        <field name="name">RESEARCH</field>
+        <field name="url">/research</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="menu_campus_life" model="website.menu">
+        <field name="name">CAMPUS LIFE</field>
+        <field name="url">/campus-life</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="menu_admissions" model="website.menu">
+        <field name="name">ADMISSIONS</field>
+        <field name="url">/school/admissions</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="menu_contact" model="website.menu">
+        <field name="name">CONTACT</field>
+        <field name="url">/contact</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">60</field>
+    </record>
+
+    <!-- Redirect contactus to contact -->
+    <record id="redirect_contactus_to_contact" model="website.rewrite">
+        <field name="name">Redirect Contact Us</field>
+        <field name="url_from">/contactus</field>
+        <field name="url_to">/contact</field>
+        <field name="redirect_type">301</field>
+    </record>
+
+    <!-- Deactivate default contactus page to allow redirect to fire -->
+    <record id="website.contactus_page" model="website.page">
+        <field name="active">False</field>
+    </record>
+</odoo>

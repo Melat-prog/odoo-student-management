@@ -1,0 +1,79 @@
+<odoo>
+    <record id="view_student_grade_list" model="ir.ui.view">
+        <field name="name">student.grade.list</field>
+        <field name="model">student.grade</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="grade_letter == 'F'" decoration-success="grade_letter in ('A', 'A+')">
+                <field name="student_id"/>
+                <field name="subject_id"/>
+                <field name="assignment_id" optional="show"/>
+                <field name="evaluation_type" optional="hide"/>
+                <field name="marks" invisible="evaluation_type == 'letter'"/>
+                <field name="is_pass" widget="boolean_toggle"/>
+                <field name="grade_letter" widget="badge" 
+                       decoration-success="is_pass" 
+                       decoration-danger="not is_pass"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_student_grade_form" model="ir.ui.view">
+        <field name="name">student.grade.form</field>
+        <field name="model">student.grade</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Source &amp; Config">
+                            <field name="student_id"/>
+                            <field name="subject_id"/>
+                            <field name="assignment_id"/>
+                            <field name="evaluation_type" widget="radio"/>
+                        </group>
+                        <group string="Evaluation">
+                            <field name="max_marks" invisible="evaluation_type != 'percentage'"/>
+                            <field name="pass_mark" invisible="evaluation_type == 'letter'"/>
+                            <field name="marks" invisible="evaluation_type == 'letter'"/>
+                            <field name="grade_letter" readonly="evaluation_type != 'letter'"/>
+                            <field name="is_pass"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Feedback">
+                            <field name="remark" placeholder="Provide feedback to the student..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_student_grade_graph" model="ir.ui.view">
+        <field name="name">student.grade.graph</field>
+        <field name="model">student.grade</field>
+        <field name="arch" type="xml">
+            <graph string="Grades Analysis" type="bar">
+                <field name="subject_id" type="row"/>
+                <field name="marks" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_student_grade_pivot" model="ir.ui.view">
+        <field name="name">student.grade.pivot</field>
+        <field name="model">student.grade</field>
+        <field name="arch" type="xml">
+            <pivot string="Grades Pivot" disable_linking="True">
+                <field name="student_id" type="row"/>
+                <field name="subject_id" type="col"/>
+                <field name="marks" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_student_grade" model="ir.actions.act_window">
+        <field name="name">Grades</field>
+        <field name="res_model">student.grade</field>
+        <field name="view_mode">list,form,graph,pivot</field>
+    </record>
+</odoo>

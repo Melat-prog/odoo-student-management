@@ -1,38 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Class List -->
-    <record id="view_class_list" model="ir.ui.view">
-        <field name="name">student.class.list</field>
-        <field name="model">student.class</field>
+    <!-- Academic Year Views -->
+    <record id="view_student_academic_year_list" model="ir.ui.view">
+        <field name="name">student.academic.year.list</field>
+        <field name="model">student.academic.year</field>
         <field name="arch" type="xml">
-            <list>
+            <list string="Academic Years" decoration-success="is_current == True">
                 <field name="name"/>
-                <field name="code"/>
-                <field name="capacity"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="is_current" widget="boolean_toggle"/>
+                <field name="active" widget="boolean_toggle"/>
             </list>
         </field>
     </record>
 
-    <!-- Class Form -->
-    <record id="view_class_form" model="ir.ui.view">
-        <field name="name">student.class.form</field>
-        <field name="model">student.class</field>
+    <record id="view_student_academic_year_form" model="ir.ui.view">
+        <field name="name">student.academic.year.form</field>
+        <field name="model">student.academic.year</field>
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="2025-2026"/></h1>
+                    </div>
                     <group>
-                        <field name="name"/>
-                        <field name="code"/>
-                        <field name="capacity"/>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                        <group>
+                            <field name="is_current"/>
+                            <field name="active"/>
+                        </group>
                     </group>
-
                     <notebook>
-                        <page string="Students">
-                            <field name="student_ids"/>
-                        </page>
-
-                        <page string="Subjects">
-                            <field name="subject_ids"/>
+                        <page string="Terms">
+                            <field name="term_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="start_date"/>
+                                    <field name="end_date"/>
+                                    <field name="is_current"/>
+                                </list>
+                            </field>
                         </page>
                     </notebook>
                 </sheet>
@@ -40,30 +53,74 @@
         </field>
     </record>
 
-    <!-- Subject List -->
-    <record id="view_subject_list" model="ir.ui.view">
-        <field name="name">student.subject.list</field>
-        <field name="model">student.subject</field>
+    <!-- Academic Term Views -->
+    <record id="view_student_term_list" model="ir.ui.view">
+        <field name="name">student.term.list</field>
+        <field name="model">student.term</field>
         <field name="arch" type="xml">
-            <list>
+            <list string="Terms">
                 <field name="name"/>
-                <field name="code"/>
-                <field name="teacher_id"/>
+                <field name="academic_year_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="is_current" widget="boolean_toggle"/>
             </list>
         </field>
     </record>
 
-    <!-- Subject Form -->
-    <record id="view_subject_form" model="ir.ui.view">
-        <field name="name">student.subject.form</field>
-        <field name="model">student.subject</field>
+    <record id="view_student_term_form" model="ir.ui.view">
+        <field name="name">student.term.form</field>
+        <field name="model">student.term</field>
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
                     <group>
-                        <field name="name"/>
-                        <field name="code"/>
-                        <field name="teacher_id"/>
+                        <group>
+                            <field name="academic_year_id"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                        <group>
+                            <field name="is_current"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Grade Level Views -->
+    <record id="view_student_grade_level_list" model="ir.ui.view">
+        <field name="name">student.grade.level.list</field>
+        <field name="model">student.grade.level</field>
+        <field name="arch" type="xml">
+            <list string="Grade Levels">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="description"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_student_grade_level_form" model="ir.ui.view">
+        <field name="name">student.grade.level.form</field>
+        <field name="model">student.grade.level</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <field name="sequence"/>
+                        <field name="description"/>
+                        <field name="active"/>
                     </group>
                 </sheet>
             </form>
@@ -71,36 +128,29 @@
     </record>
 
     <!-- Actions -->
-    <record id="action_class" model="ir.actions.act_window">
-        <field name="name">Classes</field>
-        <field name="res_model">student.class</field>
+    <record id="action_student_academic_year" model="ir.actions.act_window">
+        <field name="name">Academic Years</field>
+        <field name="res_model">student.academic.year</field>
         <field name="view_mode">list,form</field>
     </record>
 
-    <record id="action_subject" model="ir.actions.act_window">
-        <field name="name">Subjects</field>
-        <field name="res_model">student.subject</field>
+    <record id="action_student_term" model="ir.actions.act_window">
+        <field name="name">Terms</field>
+        <field name="res_model">student.term</field>
         <field name="view_mode">list,form</field>
     </record>
 
-   <!-- Academic Parent -->
-<menuitem id="menu_academic_root"
-          name="Academic"
-          parent="student_menu_root"
-          sequence="15"/>
+    <record id="action_student_grade_level" model="ir.actions.act_window">
+        <field name="name">Grade Levels</field>
+        <field name="res_model">student.grade.level</field>
+        <field name="view_mode">list,form</field>
+    </record>
 
-<!-- Classes -->
-<menuitem id="menu_class"
-          name="Classes"
-          parent="menu_academic_root"
-          action="action_class"
-          sequence="1"/>
-
-<!-- Subjects -->
-<menuitem id="menu_subject"
-          name="Subjects"
-          parent="menu_academic_root"
-          action="action_subject"
-          sequence="2"/>
+    <!-- Menus -->
+    <menuitem id="menu_academic_config" name="Configuration" parent="student_management.menu_academic_root" sequence="90"/>
+    
+    <menuitem id="menu_academic_year" name="Academic Years" parent="menu_academic_config" action="action_student_academic_year" sequence="10"/>
+    <menuitem id="menu_academic_term" name="Terms" parent="menu_academic_config" action="action_student_term" sequence="20"/>
+    <menuitem id="menu_grade_level" name="Grade Levels" parent="menu_academic_config" action="action_student_grade_level" sequence="30"/>
 
 </odoo>

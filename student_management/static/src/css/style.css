@@ -1,0 +1,688 @@
+/* Google Fonts moved to website_templates.xml head to prevent SCSS compilation issues */
+
+/* Color Palette & Base System */
+:root {
+    --amherst-cream: #fcfbf9;
+    --amherst-maroon: #4a0e17;
+    --amherst-maroon-rgb: 74, 14, 23;
+    --amherst-maroon-hover: #2e080e;
+    --amherst-gold: #D4AF37;
+    --amherst-text: #1c1c1c;
+    --amherst-muted: #5a5a5a;
+    --amherst-border: #e0dad1;
+}
+
+body, #wrapwrap {
+    background-color: var(--amherst-cream) !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    color: var(--amherst-text) !important;
+}
+
+/* Typography */
+h1, h2, h3, h4, .amherst-heading {
+    font-family: 'Playfair Display', Georgia, serif !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em !important;
+    text-transform: uppercase !important;
+    color: #0f0f0f !important;
+}
+
+.amherst-hero-title {
+    font-size: clamp(2.5rem, 6vw, 4.8rem) !important;
+    line-height: 1.05 !important;
+}
+
+.amherst-subheading {
+    font-family: 'Playfair Display', Georgia, serif !important;
+    font-style: italic !important;
+    color: var(--amherst-muted) !important;
+}
+
+/* Structural Buttons */
+.btn-amherst {
+    background-color: var(--amherst-maroon) !important;
+    color: #ffffff !important;
+    border-radius: 0px !important;
+    padding: 14px 36px !important;
+    font-size: 0.85rem !important;
+    letter-spacing: 2px !important;
+    text-transform: uppercase !important;
+    font-weight: 700 !important;
+    border: none !important;
+    display: inline-block !important;
+    text-decoration: none !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.btn-amherst:hover {
+    background-color: var(--amherst-maroon-hover) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(74, 14, 23, 0.25);
+}
+
+/* Hero Background Banner (Matching Reference Landscape Image) */
+.amherst-hero-banner-container {
+    overflow: hidden !important;
+    width: 100% !important;
+    position: relative !important;
+}
+
+.amherst-hero-banner,
+.amherst-hero-banner-img {
+    /* Note: this URL must stay in sync with static/src/js/animations.js */
+    background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.2)), 
+                url('https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat !important;
+    min-height: 540px !important;
+    width: 100% !important;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+    /* Transition lives here so it's present BEFORE the class swap happens */
+    transition: opacity 900ms cubic-bezier(0.22, 1, 0.36, 1), 
+                transform 900ms cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+/* Load-triggered Entrance Preload Animation for Hero Banner */
+/* "Loading" state: invisible + slightly zoomed in */
+body.js-animations-active .amherst-hero-loading {
+    opacity: 0;
+    transform: scale(1.04);
+}
+
+/* "Loaded" state: fully visible at normal scale (pure state toggle, no transition here) */
+.amherst-hero-loaded {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+}
+
+/* Secondary Page Headers */
+.amherst-page-header {
+    background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), 
+                url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat !important;
+    color: #ffffff !important;
+    padding: 90px 0 !important;
+}
+
+/* Grid Dividers & Cards */
+.amherst-border-right { border-right: 1px solid var(--amherst-border) !important; }
+.amherst-border-bottom { border-bottom: 1px solid var(--amherst-border) !important; }
+.amherst-card {
+    background: #ffffff !important;
+    border: 1px solid var(--amherst-border) !important;
+    padding: 32px !important;
+}
+
+/* ============================================================ */
+/* ACADEMIC THEME HEADER & NAVBAR STYLING                       */
+/* ============================================================ */
+header,
+header.o_header_standard,
+.o_header_standard,
+#top_menu_container,
+nav.navbar {
+    background-color: var(--amherst-maroon) !important;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.25) !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* Brand / Logo Title */
+.navbar-brand,
+.navbar-brand span,
+header .navbar-brand {
+    color: #F8F9FA !important;
+    font-family: 'Playfair Display', Georgia, serif !important;
+    font-weight: 800 !important;
+    letter-spacing: 1px !important;
+}
+
+/* Navigation Links */
+#top_menu .nav-link,
+nav.navbar .nav-link,
+.o_header_standard .nav-link {
+    color: #F8F9FA !important;
+    font-size: 0.85rem !important;
+    letter-spacing: 1.5px !important;
+    text-transform: uppercase !important;
+    font-weight: 600 !important;
+    padding: 0.6rem 1rem !important;
+    position: relative;
+    transition: color 0.3s ease !important;
+}
+
+/* Hover & Active Links */
+#top_menu .nav-link:hover,
+#top_menu .nav-link.active,
+nav.navbar .nav-link:hover,
+nav.navbar .nav-link.active {
+    color: #D4AF37 !important; /* Golden Accent */
+    background-color: transparent !important;
+}
+
+/* Golden Underline Indicator on Hover / Active */
+#top_menu .nav-link::after,
+nav.navbar .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 1rem;
+    right: 1rem;
+    height: 2px;
+    background-color: #D4AF37;
+    transform: scaleX(0);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#top_menu .nav-link:hover::after,
+#top_menu .nav-link.active::after,
+nav.navbar .nav-link:hover::after,
+nav.navbar .nav-link.active::after {
+    transform: scaleX(1);
+}
+
+/* Right Action Buttons ("Contact Us" / Call to Action) */
+#top_menu a[href="/contact"],
+#top_menu a[href="/school/admissions"],
+header .btn-primary,
+header .btn-outline-primary {
+    background-color: #D4AF37 !important;
+    color: #4A0E17 !important;
+    border: none !important;
+    border-radius: 0px !important;
+    font-weight: 700 !important;
+    letter-spacing: 1.5px !important;
+    font-size: 0.8rem !important;
+    padding: 8px 20px !important;
+    transition: all 0.3s ease !important;
+}
+
+#top_menu a[href="/contact"]:hover,
+#top_menu a[href="/school/admissions"]:hover,
+header .btn-primary:hover,
+header .btn-outline-primary:hover {
+    background-color: #E5C158 !important;
+    color: #2E080E !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Contact Details, Search Icon & Dropdown Icons */
+header a:not(.btn),
+header i,
+header .fa,
+.o_header_standard i,
+.o_header_standard .fa {
+    color: #F8F9FA !important;
+}
+
+#top_menu a[href="/contact"] i,
+#top_menu a[href="/school/admissions"] i {
+    color: #4A0E17 !important;
+}
+
+/* Mobile Navbar Toggler (Hamburger Icon) */
+.navbar-toggler {
+    border-color: rgba(248, 249, 250, 0.4) !important;
+    padding: 0.35rem 0.65rem !important;
+}
+
+.navbar-toggler-icon {
+    filter: invert(1) grayscale(100%) brightness(200%) !important;
+}
+
+/* --- VISIBILITY GUARANTEE & FALLBACK RULES --- */
+/* Default: elements are fully visible if JS has not activated animations */
+body:not(.js-animations-active) .amherst-reveal,
+body:not(.js-animations-active) .amherst-pop,
+body:not(.js-animations-active) .amherst-slide-left,
+body:not(.js-animations-active) .amherst-slide-right,
+body:not(.js-animations-active) .amherst-hero-loading {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+}
+
+/* Micro-Interactions & Animation Specifications */
+
+@media (prefers-reduced-motion: no-preference) {
+    /* A. Scroll Reveal & Underline Draw */
+    body.js-animations-active .amherst-reveal:not(.amherst-in-view) {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    .amherst-reveal {
+        transition: opacity 500ms ease-out, transform 500ms ease-out;
+    }
+
+    .amherst-reveal.amherst-in-view {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+
+    /* Dynamic Pop-Up Reveal (.amherst-pop) */
+    body.js-animations-active .amherst-pop:not(.amherst-in-view) {
+        opacity: 0;
+        transform: scale(0.92) translateY(30px);
+    }
+
+    .amherst-pop {
+        transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.6s ease-out;
+    }
+
+    .amherst-pop.amherst-in-view {
+        opacity: 1 !important;
+        transform: scale(1) translateY(0) !important;
+    }
+
+    /* Slide-In Timeline / Term Dates Ribbon (.amherst-slide-left / .amherst-slide-right) */
+    body.js-animations-active .amherst-slide-left:not(.amherst-in-view) {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+
+    .amherst-slide-left {
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease-out;
+    }
+
+    .amherst-slide-left.amherst-in-view {
+        opacity: 1 !important;
+        transform: translateX(0) !important;
+    }
+
+    body.js-animations-active .amherst-slide-right:not(.amherst-in-view) {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+
+    .amherst-slide-right {
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease-out;
+    }
+
+    .amherst-slide-right.amherst-in-view {
+        opacity: 1 !important;
+        transform: translateX(0) !important;
+    }
+
+    /* Hero Subtitle & Button Staggered Entrance */
+    .amherst-hero-subtitle {
+        opacity: 0;
+        animation: amherstSubtitleFade 600ms cubic-bezier(0.16, 1, 0.3, 1) 350ms forwards !important;
+    }
+
+    .amherst-hero-btn {
+        opacity: 0;
+        animation: amherstBtnFade 600ms cubic-bezier(0.16, 1, 0.3, 1) 550ms forwards !important;
+    }
+
+    @keyframes amherstSubtitleFade {
+        from {
+            opacity: 0;
+            transform: translateY(16px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes amherstBtnFade {
+        from {
+            opacity: 0;
+            transform: translateY(16px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Staggered Delays for Grid Children (80ms increments, capped at 4 items) */
+    .row > .amherst-reveal:nth-child(1), .row > .amherst-pop:nth-child(1),
+    .amherst-reveal:nth-child(1), .amherst-pop:nth-child(1) { transition-delay: 0ms; }
+    .row > .amherst-reveal:nth-child(2), .row > .amherst-pop:nth-child(2),
+    .amherst-reveal:nth-child(2), .amherst-pop:nth-child(2) { transition-delay: 80ms; }
+    .row > .amherst-reveal:nth-child(3), .row > .amherst-pop:nth-child(3),
+    .amherst-reveal:nth-child(3), .amherst-pop:nth-child(3) { transition-delay: 160ms; }
+    .row > .amherst-reveal:nth-child(4), .row > .amherst-pop:nth-child(4),
+    .amherst-reveal:nth-child(4), .amherst-pop:nth-child(4) { transition-delay: 240ms; }
+
+    /* Kicker Underlines */
+    .amherst-kicker {
+        position: relative;
+        display: inline-block;
+    }
+
+    .amherst-kicker::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--amherst-maroon);
+        transition: width 400ms ease;
+    }
+
+    .amherst-in-view .amherst-kicker::after,
+    .amherst-kicker.amherst-in-view::after {
+        width: 100%;
+    }
+
+    /* B. Hero Heading Text Word-Reveal */
+    .amherst-hero-title span {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(12px);
+        animation: amherstWordReveal 400ms ease-out forwards;
+    }
+
+    .amherst-hero-title span:nth-child(1) { animation-delay: 0ms; }
+    .amherst-hero-title span:nth-child(2) { animation-delay: 60ms; }
+    .amherst-hero-title span:nth-child(3) { animation-delay: 120ms; }
+    .amherst-hero-title span:nth-child(4) { animation-delay: 180ms; }
+    .amherst-hero-title span:nth-child(5) { animation-delay: 240ms; }
+    .amherst-hero-title span:nth-child(6) { animation-delay: 300ms; }
+    .amherst-hero-title span:nth-child(n+7) { animation-delay: 360ms; }
+
+    @keyframes amherstWordReveal {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Subheading delayed fade-in after title word animation completes */
+    .amherst-subheading {
+        opacity: 0;
+        animation: amherstSubheadingFade 600ms ease-out 500ms forwards;
+    }
+
+    @keyframes amherstSubheadingFade {
+        from {
+            opacity: 0;
+            transform: translateY(16px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* C. Card Hover & Image Micro-Interactions */
+    .amherst-card {
+        transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease !important;
+    }
+
+    .amherst-card:hover {
+        border-color: rgba(var(--amherst-maroon-rgb), 0.3) !important;
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+    }
+
+    .amherst-card .amherst-heading,
+    .amherst-card h4,
+    .amherst-card h5 {
+        transition: transform 250ms ease !important;
+    }
+
+    .amherst-card:hover .amherst-heading,
+    .amherst-card:hover h4,
+    .amherst-card:hover h5 {
+        transform: scale(1.015);
+    }
+
+    /* Image Zoom Micro-Interaction */
+    .amherst-card-img {
+        transition: transform 0.4s ease !important;
+    }
+
+    .amherst-card:hover .amherst-card-img,
+    a:hover .amherst-card-img {
+        transform: scale(1.05) !important;
+    }
+
+    /* Floating Badge Slide-Up */
+    .amherst-badge {
+        transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    }
+
+    .amherst-card:hover .amherst-badge,
+    a:hover .amherst-badge {
+        transform: translateY(-4px) !important;
+        box-shadow: 0 4px 12px rgba(74, 14, 23, 0.25) !important;
+    }
+}
+
+/* Fallback / Instant State for prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    .amherst-reveal, .amherst-pop, .amherst-slide-left, .amherst-slide-right, .amherst-hero-loading {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+        filter: none !important;
+    }
+    .amherst-kicker::after {
+        width: 100% !important;
+        transition: none !important;
+    }
+    .amherst-hero-title span {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+    }
+    .amherst-subheading, .amherst-hero-subtitle, .amherst-hero-btn {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+    }
+    .amherst-card:hover .amherst-heading,
+    .amherst-card:hover h4,
+    .amherst-card:hover h5 {
+        transform: none !important;
+    }
+}
+
+/* Quick View Pop-Up Modal Glassmorphism & Zoom Animation */
+#courseDetailModal .modal-backdrop,
+.modal-backdrop.show {
+    backdrop-filter: blur(6px) !important;
+    background-color: rgba(15, 15, 15, 0.6) !important;
+}
+
+#courseDetailModal .modal-content {
+    background-color: #fcfbf9 !important;
+    border: 1px solid var(--amherst-border) !important;
+    border-radius: 0px !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25) !important;
+    transform: scale(0.9);
+    transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+#courseDetailModal.show .modal-content {
+    transform: scale(1) !important;
+}
+
+#courseDetailModal .modal-header {
+    border-bottom: 1px solid var(--amherst-border) !important;
+    background-color: #ffffff !important;
+    padding: 1.25rem 1.5rem !important;
+}
+
+#courseDetailModal .modal-footer {
+    border-top: 1px solid var(--amherst-border) !important;
+    background-color: #ffffff !important;
+    padding: 1rem 1.5rem !important;
+}
+
+/* Responsive Overrides */
+@media (max-width: 768px) {
+    /* Section Padding & Spacing */
+    section, .py-5 {
+        padding-top: 2.25rem !important;
+        padding-bottom: 2.25rem !important;
+    }
+
+    .amherst-page-header {
+        padding: 48px 16px !important;
+    }
+
+    .amherst-hero-banner {
+        min-height: 280px !important;
+    }
+
+    /* Typography & Headings */
+    h1, h2, .amherst-heading, .amherst-hero-title, .amherst-section-title {
+        font-size: clamp(1.6rem, 5.5vw, 2rem) !important;
+        line-height: 1.2 !important;
+        letter-spacing: -0.01em !important;
+    }
+
+    h3 {
+        font-size: 1.35rem !important;
+        line-height: 1.25 !important;
+    }
+
+    h4 {
+        font-size: 1.1rem !important;
+        line-height: 1.3 !important;
+    }
+
+    .amherst-subheading {
+        font-size: 1.05rem !important;
+        line-height: 1.4 !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .amherst-kicker,
+    p.text-uppercase[style*="letter-spacing"] {
+        font-size: 0.75rem !important;
+        letter-spacing: 1.5px !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    /* Paragraph Text & Clamping */
+    p, .amherst-lead, .amherst-editorial-text, p.lh-lg {
+        font-size: 0.95rem !important;
+        line-height: 1.5 !important;
+    }
+
+    /* Clamp long paragraph summaries inside cards on mobile */
+    .amherst-card p {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Card & Grid Optimization */
+    .amherst-card {
+        padding: 1.25rem !important;
+        margin-bottom: 1.25rem;
+    }
+
+    .amherst-border-right {
+        border-right: none !important;
+        border-bottom: 1px solid var(--amherst-border) !important;
+    }
+
+    /* Mobile Stat Ribbon Adjustments */
+    .amherst-stat-num {
+        font-size: 1.8rem !important;
+    }
+
+    /* Buttons */
+    .btn-amherst {
+        padding: 12px 24px !important;
+        font-size: 0.78rem !important;
+        letter-spacing: 1.5px !important;
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Mobile responsive scale-down logic for hero banner zoom reveal */
+@media (max-width: 767.98px) {
+    body.js-animations-active .amherst-hero-loading {
+        transform: scale(1.02);
+    }
+}
+
+/* ============================================================ */
+/* INFINITE HORIZONTAL MARQUEE STYLING                          */
+/* ============================================================ */
+.amherst-marquee-wrapper {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    padding: 1.5rem 0;
+    /* Soft fade gradient mask at the edges */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.amherst-marquee-track {
+    display: flex;
+    gap: 1.5rem;
+    width: max-content;
+    animation: marqueeScroll 25s linear infinite;
+}
+
+.amherst-marquee-card {
+    flex: 0 0 320px;
+    width: 320px;
+}
+
+/* Hover Pause so users can click/read */
+.amherst-marquee-wrapper:hover .amherst-marquee-track {
+    animation-play-state: paused;
+}
+
+@keyframes marqueeScroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Reduced Motion / Accessibility Override */
+@media (prefers-reduced-motion: reduce) {
+    .amherst-marquee-wrapper {
+        overflow: visible !important;
+        -webkit-mask-image: none !important;
+        mask-image: none !important;
+    }
+    .amherst-marquee-track {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
+        gap: 1.5rem !important;
+        width: 100% !important;
+        animation: none !important;
+    }
+    .amherst-marquee-card {
+        flex: none !important;
+        width: auto !important;
+    }
+    /* Hide the duplicated cards when not using the marquee loop */
+    .amherst-marquee-dup {
+        display: none !important;
+    }
+}
+
+/* ============================================================ */
+/* NAVBAR & MENU CLEANUP (JOBS & DUPLICATE CONTACT)              */
+/* ============================================================ */
+#top_menu li:has(a[href*="/jobs"]),
+#top_menu li:has(a[href*="/careers"]),
+#top_menu li:has(a[href="/contactus"]),
+#top_menu li:has(a[href*="/contact-us"]),
+.o_header_standard li:has(a[href*="/jobs"]),
+.o_header_standard li:has(a[href*="/careers"]),
+.o_header_standard li:has(a[href="/contactus"]),
+.o_header_standard li:has(a[href*="/contact-us"]) {
+    display: none !important;
+}

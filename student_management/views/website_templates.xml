@@ -1,0 +1,1319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!-- INJECT FONTS INTO WEBSITE HEAD                               -->
+    <!-- ============================================================ -->
+    <template id="website_layout_inherit_fonts" inherit_id="website.layout" name="NextGen Fonts &amp; Custom Layout">
+        <xpath expr="//head" position="inside">
+            <link rel="preconnect" href="https://fonts.googleapis.com"/>
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+            <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;display=swap" rel="stylesheet"/>
+            <style>
+                /* Hide any top menu items that are not our specific custom URLs */
+                #top_menu > li > a:not([href="/"]):not([href="/about"]):not([href="/academics"]):not([href="/courses"]):not([href="/research"]):not([href="/campus-life"]):not([href="/school/admissions"]):not([href="/contact"]) { 
+                    display: none !important; 
+                }
+                /* Hide shopping cart icon if website_sale is installed */
+                .o_wsale_my_cart, li.o_wsale_my_cart { display: none !important; }
+            </style>
+        </xpath>
+
+        <!-- Replace default Odoo footer with single unified NextGen Academy footer -->
+        <xpath expr="//footer" position="replace">
+            <footer id="footer" class="py-5" style="background-color:#0f0f0f; color:#ffffff;">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4 mb-4 mb-md-0">
+                            <h4 style="font-family:'Playfair Display',Georgia,serif; font-size:1.4rem; margin-bottom:1rem; text-transform:uppercase;">NextGen Academy</h4>
+                            <p style="color:rgba(255,255,255,0.6); font-size:0.9rem; line-height:1.8;">
+                                <i class="fa fa-map-marker" style="margin-right:6px;"></i> Addis Ababa, Ethiopia
+                            </p>
+                        </div>
+                        <div class="col-md-4 mb-4 mb-md-0">
+                            <h5 style="text-transform:uppercase; font-size:0.8rem; letter-spacing:2px; margin-bottom:1rem; color:rgba(255,255,255,0.5);">Navigation</h5>
+                            <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                                <a href="/" style="color:rgba(255,255,255,0.7); text-decoration:none; font-size:0.9rem;">Home</a>
+                                <a href="/about" style="color:rgba(255,255,255,0.7); text-decoration:none; font-size:0.9rem;">About</a>
+                                <a href="/academics" style="color:rgba(255,255,255,0.7); text-decoration:none; font-size:0.9rem;">Academics</a>
+                                <a href="/research" style="color:rgba(255,255,255,0.7); text-decoration:none; font-size:0.9rem;">Research</a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h5 style="text-transform:uppercase; font-size:0.8rem; letter-spacing:2px; margin-bottom:1rem; color:rgba(255,255,255,0.5);">Connect</h5>
+                            <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                                <a href="/campus-life" style="color:rgba(255,255,255,0.7); text-decoration:none; font-size:0.9rem;">Campus Life</a>
+                                <a href="/contact" style="color:rgba(255,255,255,0.7); text-decoration:none; font-size:0.9rem;">Contact</a>
+                                <a href="/school/admissions" style="color:rgba(255,255,255,0.7); text-decoration:none; font-size:0.9rem;">Apply Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4" style="border-top:1px solid rgba(255,255,255,0.1); text-align:center;">
+                        <p style="color:rgba(255,255,255,0.4); font-size:0.8rem; margin:0;">© 2024 NextGen Academy. All rights reserved.</p>
+                    </div>
+                </div>
+            </footer>
+        </xpath>
+
+        <!-- Quick View Course Detail Modal (Site-Wide) -->
+        <xpath expr="//footer[@id='footer']" position="after">
+            <div class="modal fade" id="courseDetailModal" tabindex="-1" aria-labelledby="courseModalTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <span id="courseModalCode" class="badge mb-1" style="background:rgba(74,14,23,0.1); color:#4a0e17; font-weight:700; font-size:0.75rem; letter-spacing:1px;"></span>
+                                <h4 class="modal-title amherst-heading" id="courseModalTitle" style="font-size:1.25rem; margin:0; color:#0f0f0f !important;">Course Details</h4>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                            <div class="row mb-3">
+                                <div class="col-md-6 mb-2">
+                                    <div class="p-3" style="background:#f8f6f3; border:1px solid #e0dad1;">
+                                        <p class="text-uppercase mb-1" style="font-size:0.7rem; letter-spacing:1.5px; color:#8a8680;">Instructor</p>
+                                        <h6 id="courseModalInstructor" class="amherst-heading mb-0" style="font-size:0.95rem; color:#4a0e17 !important;">Faculty Lead</h6>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="p-3" style="background:#f8f6f3; border:1px solid #e0dad1;">
+                                        <p class="text-uppercase mb-1" style="font-size:0.7rem; letter-spacing:1.5px; color:#8a8680;">Duration</p>
+                                        <h6 id="courseModalDuration" class="amherst-heading mb-0" style="font-size:0.95rem; color:#4a0e17 !important;">1 Academic Term</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <h6 class="amherst-heading mb-2" style="font-size:0.85rem; letter-spacing:1px;">Program Overview</h6>
+                                <p id="courseModalDescription" style="color:#5a5a5a; font-size:0.92rem; line-height:1.75; margin:0;">Detailed curriculum information and learning outcomes.</p>
+                            </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-between align-items-center">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="font-size:0.8rem; text-transform:uppercase; letter-spacing:1px;">Close</button>
+                            <a href="/school/admissions" class="btn btn-amherst" style="font-size:0.8rem;">Apply for Admission</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- AMHERST-STYLE INSTITUTIONAL HOMEPAGE                         -->
+    <!-- ============================================================ -->
+    <template id="homepage_full_institutional" name="Institutional Homepage">
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="False"/>
+            <t t-set="no_footer" t-value="False"/>
+            <div id="wrap" class="oe_structure oe_empty">
+
+                <!-- HERO HEADER SECTION -->
+                <section class="text-center py-5 bg-white amherst-border-bottom">
+                    <div class="container py-4">
+                        <p class="text-uppercase mb-3 amherst-kicker" style="letter-spacing:3px; font-size:0.8rem; color:#8a8680;">Est. 2024 — A New Standard in Education</p>
+                        <h1 class="amherst-heading amherst-hero-title mb-3"><span>FORGE</span> <span>YOUR</span> <span>LEGACY</span></h1>
+                        <p class="amherst-subheading amherst-hero-subtitle fs-4 mb-4">
+                            Rooted in Tradition, Innovating for Ethiopia's Future.<br/>
+                            Join our Global Community of Leaders.
+                        </p>
+                        <a href="/academics" class="btn btn-amherst amherst-hero-btn">EXPLORE ADMISSIONS</a>
+                    </div>
+                </section>
+
+                <!-- FULL-BLEED CAMPUS LANDSCAPE BANNER -->
+                <div class="amherst-hero-banner-container">
+                    <section class="amherst-hero-banner amherst-hero-banner-img amherst-hero-loading"></section>
+                </div>
+
+                <!-- STATS RIBBON -->
+                <section class="py-4 amherst-border-bottom amherst-reveal" style="background-color:#ffffff;">
+                    <div class="container">
+                        <div class="row text-center">
+                            <div class="col-6 col-md-3 py-3 amherst-border-right amherst-reveal">
+                                <div class="amherst-heading amherst-stat-num" style="font-size:2.4rem;"><t t-esc="total_students"/></div>
+                                <div style="font-size:0.8rem; text-transform:uppercase; letter-spacing:2px; color:#8a8680;" class="amherst-kicker">Active Students</div>
+                            </div>
+                            <div class="col-6 col-md-3 py-3 amherst-border-right amherst-reveal">
+                                <div class="amherst-heading amherst-stat-num" style="font-size:2.4rem;"><t t-esc="total_courses"/></div>
+                                <div style="font-size:0.8rem; text-transform:uppercase; letter-spacing:2px; color:#8a8680;" class="amherst-kicker">Open Programs</div>
+                            </div>
+                            <div class="col-6 col-md-3 py-3 amherst-border-right amherst-reveal">
+                                <div class="amherst-heading amherst-stat-num" style="font-size:2.4rem;"><t t-esc="total_teachers"/></div>
+                                <div style="font-size:0.8rem; text-transform:uppercase; letter-spacing:2px; color:#8a8680;" class="amherst-kicker">Faculty Members</div>
+                            </div>
+                            <div class="col-6 col-md-3 py-3 amherst-reveal">
+                                <div class="amherst-heading amherst-stat-num" style="font-size:2.4rem;">98%</div>
+                                <div style="font-size:0.8rem; text-transform:uppercase; letter-spacing:2px; color:#8a8680;" class="amherst-kicker">Satisfaction Rate</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- EDITORIAL CONTENT SECTION -->
+                <section class="py-5 container">
+                    <div class="row py-4">
+                        <div class="col-md-6 pe-lg-5 amherst-border-right mb-4 mb-md-0 amherst-slide-left">
+                            <p class="text-uppercase mb-2 amherst-kicker" style="letter-spacing:2px; font-size:0.75rem; color:#8a8680;">Our Platform</p>
+                            <h3 class="amherst-heading mb-3">OUR ACADEMIC MISSION</h3>
+                            <p class="lh-lg" style="color:#5a5a5a;">
+                                Our platform brings together student enrollment, attendance tracking,
+                                grade management, financial reporting, and parent communication into a
+                                single, elegantly designed system. Every data point is connected —
+                                from a student's first application through graduation day.
+                            </p>
+                            <p class="lh-lg" style="color:#5a5a5a;">
+                                Real-time analytics empower administrators and faculty to make data-driven
+                                decisions, identify at-risk students early, and optimize academic outcomes
+                                across the entire institution.
+                            </p>
+                        </div>
+                        <div class="col-md-6 ps-lg-5 amherst-slide-right">
+                            <p class="text-uppercase mb-2 amherst-kicker" style="letter-spacing:2px; font-size:0.75rem; color:#8a8680;">Our Vision</p>
+                            <h3 class="amherst-heading mb-3">CAMPUS &amp; COMMUNITY</h3>
+                            <p class="lh-lg" style="color:#5a5a5a;">
+                                Our built-in AI Study Assistant helps students summarize complex documents,
+                                generate practice questions, and receive personalized study recommendations —
+                                all within the same portal where they check grades and attendance.
+                            </p>
+                            <p class="lh-lg" style="color:#5a5a5a;">
+                                We envision a world where technology removes administrative burden
+                                and lets educators focus on what matters most: inspiring the next
+                                generation of thinkers, creators, and leaders.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ACADEMIC TERM DATES RIBBON (Slide-In Timeline) -->
+                <section class="py-5 amherst-border-bottom" style="background:#f8f6f3;">
+                    <div class="container">
+                        <div class="text-center mb-4 amherst-reveal">
+                            <p class="text-uppercase mb-1 amherst-kicker" style="letter-spacing:3px; font-size:0.7rem; color:#8a8680;">Academic Calendar</p>
+                            <h3 class="amherst-heading mb-0">Key Term Dates &amp; Milestones</h3>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6 amherst-slide-left">
+                                <div class="amherst-card h-100 d-flex align-items-center">
+                                    <div class="me-3 p-3 text-center" style="background:#4a0e17; color:#fff; min-width:80px;">
+                                        <span class="d-block font-weight-bold" style="font-size:1.4rem;">SEP</span>
+                                        <span style="font-size:0.75rem; letter-spacing:1px;">15</span>
+                                    </div>
+                                    <div>
+                                        <h5 class="amherst-heading mb-1" style="font-size:1rem;">Fall Semester Convocation</h5>
+                                        <p class="mb-0" style="color:#5a5a5a; font-size:0.85rem;">Official opening of academic term &amp; orientation for incoming students.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 amherst-slide-right">
+                                <div class="amherst-card h-100 d-flex align-items-center">
+                                    <div class="me-3 p-3 text-center" style="background:#4a0e17; color:#fff; min-width:80px;">
+                                        <span class="d-block font-weight-bold" style="font-size:1.4rem;">JAN</span>
+                                        <span style="font-size:0.75rem; letter-spacing:1px;">20</span>
+                                    </div>
+                                    <div>
+                                        <h5 class="amherst-heading mb-1" style="font-size:1rem;">Spring Science &amp; Innovation Expo</h5>
+                                        <p class="mb-0" style="color:#5a5a5a; font-size:0.85rem;">Annual student research showcase &amp; national project exhibition.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- FACULTY SECTION (Pop-Up Cards) -->
+                <section class="py-5 amherst-border-bottom" style="background-color:#ffffff;">
+                    <div class="container">
+                        <div class="text-center mb-5 amherst-reveal">
+                            <p class="text-uppercase mb-2 amherst-kicker" style="letter-spacing:3px; font-size:0.75rem; color:#8a8680;">Our Team</p>
+                            <h2 class="amherst-heading">Distinguished Faculty</h2>
+                        </div>
+                        <div class="row justify-content-center">
+                            <t t-foreach="teachers" t-as="teacher">
+                                <div class="col-lg-3 col-md-6 mb-4 amherst-pop">
+                                    <div class="amherst-card text-center">
+                                        <div class="mb-3" style="width:80px; height:80px; border-radius:50%; margin:0 auto; overflow:hidden; background-color:#f0ece6; display:flex; align-items:center; justify-content:center;">
+                                            <t t-if="teacher.image_1920">
+                                                <img t-attf-src="data:image/png;base64,#{teacher.image_1920}" alt="Faculty" class="amherst-card-img" style="width:100%; height:100%; object-fit:cover;"/>
+                                            </t>
+                                            <t t-else="">
+                                                <i class="fa fa-user fa-2x" style="color:#8a8680;"></i>
+                                            </t>
+                                        </div>
+                                        <h4 class="amherst-heading" style="font-size:1rem;"><t t-esc="teacher.name"/></h4>
+                                        <p style="font-size:0.85rem; color:#8a8680;"><t t-esc="teacher.specialization or 'Faculty'"/></p>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PROGRAMS GRID SECTION (Marquee Loop) -->
+                <section class="py-5">
+                    <div class="container-fluid px-0">
+                        <div class="text-center mb-5 amherst-reveal">
+                            <p class="text-uppercase mb-2 amherst-kicker" style="letter-spacing:3px; font-size:0.75rem; color:#8a8680;">Explore</p>
+                            <h2 class="amherst-heading">Our Academic Programs</h2>
+                        </div>
+                        <div class="amherst-marquee-wrapper">
+                            <div class="amherst-marquee-track">
+                                <t t-foreach="courses" t-as="course">
+                                    <div class="amherst-marquee-card">
+                                        <div class="amherst-card h-100 d-flex flex-column">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <span class="badge amherst-badge" style="background:rgba(74,14,23,0.1); color:#4a0e17; font-size:0.7rem; letter-spacing:1.5px;">
+                                                    <t t-if="course.grade">
+                                                        <t t-esc="dict(course._fields['grade'].selection).get(course.grade, '')"/>
+                                                    </t>
+                                                    <t t-else="">Program</t>
+                                                </span>
+                                                <t t-if="course.duration">
+                                                    <span style="font-size:0.75rem; color:#8a8680;">
+                                                        <t t-esc="course.duration"/> <t t-esc="course.duration_unit or 'months'"/>
+                                                    </span>
+                                                </t>
+                                            </div>
+                                            <h4 class="amherst-heading" style="font-size:1.1rem;"><t t-esc="course.name"/></h4>
+                                            <p style="color:#5a5a5a; font-size:0.9rem; line-height:1.7;">
+                                                <t t-if="course.description">
+                                                    <t t-esc="course.description[:120]"/>…
+                                                </t>
+                                                <t t-else="">
+                                                    A comprehensive program designed to build deep expertise and practical skills for the modern world.
+                                                </t>
+                                            </p>
+                                            <div class="mt-auto pt-2 d-flex gap-2">
+                                                <button type="button" class="btn btn-outline-secondary btn-sm w-50" 
+                                                        data-amherst-quickview="1"
+                                                        t-att-data-title="course.name"
+                                                        t-att-data-code="course.code or ''"
+                                                        t-att-data-instructor="course.teacher_id.name if course.teacher_id else 'Faculty Lead'"
+                                                        t-att-data-duration="(str(course.duration) + ' ' + (course.duration_unit or 'months')) if course.duration else '1 Term'"
+                                                        t-att-data-description="course.description or 'A comprehensive program designed to build deep expertise and practical skills.'"
+                                                        style="font-size:0.75rem; text-transform:uppercase;">
+                                                    Quick View
+                                                </button>
+                                                <a href="/school/admissions" class="btn btn-amherst btn-sm w-50" style="font-size:0.75rem;">Apply</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                                <t t-foreach="courses" t-as="course">
+                                    <div class="amherst-marquee-card amherst-marquee-dup">
+                                        <div class="amherst-card h-100 d-flex flex-column">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <span class="badge amherst-badge" style="background:rgba(74,14,23,0.1); color:#4a0e17; font-size:0.7rem; letter-spacing:1.5px;">
+                                                    <t t-if="course.grade">
+                                                        <t t-esc="dict(course._fields['grade'].selection).get(course.grade, '')"/>
+                                                    </t>
+                                                    <t t-else="">Program</t>
+                                                </span>
+                                                <t t-if="course.duration">
+                                                    <span style="font-size:0.75rem; color:#8a8680;">
+                                                        <t t-esc="course.duration"/> <t t-esc="course.duration_unit or 'months'"/>
+                                                    </span>
+                                                </t>
+                                            </div>
+                                            <h4 class="amherst-heading" style="font-size:1.1rem;"><t t-esc="course.name"/></h4>
+                                            <p style="color:#5a5a5a; font-size:0.9rem; line-height:1.7;">
+                                                <t t-if="course.description">
+                                                    <t t-esc="course.description[:120]"/>…
+                                                </t>
+                                                <t t-else="">
+                                                    A comprehensive program designed to build deep expertise and practical skills for the modern world.
+                                                </t>
+                                            </p>
+                                            <div class="mt-auto pt-2 d-flex gap-2">
+                                                <button type="button" class="btn btn-outline-secondary btn-sm w-50" 
+                                                        data-amherst-quickview="1"
+                                                        t-att-data-title="course.name"
+                                                        t-att-data-code="course.code or ''"
+                                                        t-att-data-instructor="course.teacher_id.name if course.teacher_id else 'Faculty Lead'"
+                                                        t-att-data-duration="(str(course.duration) + ' ' + (course.duration_unit or 'months')) if course.duration else '1 Term'"
+                                                        t-att-data-description="course.description or 'A comprehensive program designed to build deep expertise and practical skills.'"
+                                                        style="font-size:0.75rem; text-transform:uppercase;">
+                                                    Quick View
+                                                </button>
+                                                <a href="/school/admissions" class="btn btn-amherst btn-sm w-50" style="font-size:0.75rem;">Apply</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <a href="/academics" class="btn btn-amherst">VIEW ALL PROGRAMS</a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CTA BANNER -->
+                <section class="amherst-page-header text-center">
+                    <div class="container py-4">
+                        <h2 class="amherst-heading" style="color:#ffffff !important; font-size:2.4rem;">Begin Your Chapter</h2>
+                        <p class="mt-3 mb-4" style="color:rgba(255,255,255,0.85); font-size:1.1rem; max-width:600px; margin-left:auto; margin-right:auto;">
+                            Join a community that believes in the power of education
+                            to transform lives and shape the future.
+                        </p>
+                        <a href="/school/admissions" class="btn btn-amherst" style="background-color:#c4a35a !important;">APPLY NOW</a>
+                    </div>
+                </section>
+
+
+
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- PROGRAMS PAGE                                                -->
+    <!-- ============================================================ -->
+    <template id="school_programs" name="School Programs">
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="False"/>
+            <t t-set="no_footer" t-value="False"/>
+            <div id="wrap" class="oe_structure oe_empty">
+                <section class="amherst-page-header text-center">
+                    <div class="container">
+                        <h1 class="amherst-heading amherst-hero-title" style="color:#ffffff !important;"><span>Our</span> <span>Programs</span></h1>
+                    </div>
+                </section>
+                <div class="container py-5">
+                    <div class="row">
+                        <t t-foreach="courses" t-as="course">
+                            <div class="col-md-4 mb-4">
+                                <div class="amherst-card h-100">
+                                    <h5 class="amherst-heading" style="font-size:1rem;"><t t-esc="course.name"/></h5>
+                                    <p style="color:#8a8680; font-size:0.85rem;">
+                                        Grade: <t t-esc="course.grade"/> ·
+                                        Duration: <t t-esc="course.duration"/> <t t-esc="course.duration_unit"/> ·
+                                        Capacity: <t t-esc="course.capacity"/> Students
+                                    </p>
+                                    <a href="/school/admissions" class="btn btn-amherst mt-3 w-100">Enroll Now</a>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- ADMISSIONS FORM                                              -->
+    <!-- ============================================================ -->
+    <template id="school_admissions_form" name="School Admissions">
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="False"/>
+            <t t-set="no_footer" t-value="False"/>
+            <div id="wrap" class="oe_structure oe_empty">
+                <section class="amherst-page-header text-center">
+                    <div class="container">
+                        <h1 class="amherst-heading amherst-hero-title" style="color:#ffffff !important;"><span>Admissions</span> <span>Application</span></h1>
+                    </div>
+                </section>
+                <div class="container py-5">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="amherst-card">
+                                <form action="/school/admissions/submit" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="first_name" class="form-label">First Name *</label>
+                                            <input type="text" class="form-control" name="first_name" required="1" style="border-radius:0;"/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="last_name" class="form-label">Last Name *</label>
+                                            <input type="text" class="form-control" name="last_name" required="1" style="border-radius:0;"/>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="email" class="form-label">Email Address *</label>
+                                            <input type="email" class="form-control" name="email" required="1" style="border-radius:0;"/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="phone" class="form-label">Phone Number</label>
+                                            <input type="text" class="form-control" name="phone" style="border-radius:0;"/>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="class_id" class="form-label">Applying For Class</label>
+                                        <select class="form-select" name="class_id" style="border-radius:0;">
+                                            <option value="">Select a Class...</option>
+                                            <t t-foreach="classes" t-as="c">
+                                                <option t-att-value="c.id"><t t-esc="c.name"/></option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="previous_school" class="form-label">Previous School</label>
+                                        <input type="text" class="form-control" name="previous_school" style="border-radius:0;"/>
+                                    </div>
+                                    <div class="text-end">
+                                        <button type="submit" class="btn btn-amherst">Submit Application</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- ADMISSIONS SUCCESS                                           -->
+    <!-- ============================================================ -->
+    <template id="school_admissions_success" name="Application Received">
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="False"/>
+            <t t-set="no_footer" t-value="False"/>
+            <div id="wrap" class="oe_structure oe_empty">
+                <div class="container py-5 text-center">
+                    <div class="py-5">
+                        <i class="fa fa-5x fa-check-circle mb-4" style="color:#4a0e17;"></i>
+                        <h1 class="amherst-heading">Application Submitted!</h1>
+                        <p class="lead mt-3" style="color:#5a5a5a;">Thank you for applying to NextGen Academy. Our admissions office will review your application and contact you shortly.</p>
+                        <div class="mt-4">
+                            <a href="/" class="btn btn-amherst">Return to Homepage</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- ABOUT US PAGE                                                -->
+    <!-- ============================================================ -->
+    <!-- ============================================================ -->
+    <!-- ABOUT US PAGE — Unified 3-Section Layout                     -->
+    <!-- ============================================================ -->
+    <template id="about_us_page" name="About Us">
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="False"/>
+            <t t-set="no_footer" t-value="False"/>
+            <div id="wrap" class="oe_structure oe_empty">
+
+                <!-- HERO -->
+                <section class="amherst-page-header text-center" style="background:linear-gradient(rgba(15,23,42,0.75),rgba(74,14,23,0.65)),url('https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?q=80&amp;w=2000&amp;auto=format&amp;fit=crop') center/cover no-repeat !important;">
+                    <div class="container">
+                        <p class="text-uppercase mb-2 amherst-kicker" style="letter-spacing:3px; font-size:0.8rem; color:rgba(255,255,255,0.7);">Est. 2024 — Excellence Rooted in Ethiopia</p>
+                        <h1 class="amherst-heading amherst-hero-title" style="color:#ffffff !important;"><span>About</span> <span>Our</span> <span>Academy</span></h1>
+                        <p class="mt-3" style="color:rgba(255,255,255,0.85); font-size:1.1rem; max-width:600px; margin:0 auto;">Forging the next generation of leaders through tradition, innovation, and an unwavering commitment to academic integrity.</p>
+                    </div>
+                </section>
+
+                <!-- SECTION 1: Heritage, Mission, Core Values -->
+                <section class="py-5" style="background:#fff;">
+                    <div class="container py-3">
+                        <div class="row text-center mb-5">
+                            <div class="col-12">
+                                <p class="text-uppercase mb-2" style="letter-spacing:3px; font-size:0.75rem; color:#8a8680;">Our Story</p>
+                                <h2 class="amherst-heading">Heritage, Mission &amp; Core Values</h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 mb-4">
+                                <div class="amherst-card h-100" style="border-left:4px solid #4a0e17; padding-left:1.5rem;">
+                                    <p class="text-uppercase mb-2" style="letter-spacing:2px; font-size:0.7rem; color:#8a8680;">Our Heritage</p>
+                                    <h4 class="amherst-heading mb-3" style="font-size:1.1rem;">Rooted in Tradition</h4>
+                                    <p style="color:#5a5a5a; font-size:0.95rem; line-height:1.8;">Founded on principles of academic excellence and intellectual freedom, NextGen Academy draws inspiration from the world's most distinguished academic traditions while staying deeply rooted in the cultural richness of Ethiopia.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 mb-4">
+                                <div class="amherst-card h-100" style="border-left:4px solid #4a0e17; padding-left:1.5rem;">
+                                    <p class="text-uppercase mb-2" style="letter-spacing:2px; font-size:0.7rem; color:#8a8680;">Our Mission</p>
+                                    <h4 class="amherst-heading mb-3" style="font-size:1.1rem;">Transformative Education</h4>
+                                    <p style="color:#5a5a5a; font-size:0.95rem; line-height:1.8;">To provide transformative education that empowers students to become ethical leaders, innovative thinkers, and engaged global citizens. Every student deserves access to world-class learning experiences that unlock their full potential.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 mb-4">
+                                <div class="amherst-card h-100" style="border-left:4px solid #4a0e17; padding-left:1.5rem;">
+                                    <p class="text-uppercase mb-2" style="letter-spacing:2px; font-size:0.7rem; color:#8a8680;">Core Values</p>
+                                    <h4 class="amherst-heading mb-3" style="font-size:1.1rem;">What We Stand For</h4>
+                                    <ul style="color:#5a5a5a; font-size:0.95rem; line-height:2; padding-left:1.2rem;">
+                                        <li><strong>Integrity</strong> — in all we do</li>
+                                        <li><strong>Curiosity</strong> — the engine of discovery</li>
+                                        <li><strong>Inclusivity</strong> — every voice matters</li>
+                                        <li><strong>Excellence</strong> — our relentless standard</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 2: Campus Imagery + Academic Paths -->
+                <section class="py-5" style="background:#f8f6f3;">
+                    <div class="container py-3">
+                        <div class="row text-center mb-5">
+                            <div class="col-12">
+                                <p class="text-uppercase mb-2" style="letter-spacing:3px; font-size:0.75rem; color:#8a8680;">The Experience</p>
+                                <h2 class="amherst-heading">Discover Our Campus &amp; Academic Paths</h2>
+                            </div>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6 col-lg-3">
+                                <div class="position-relative overflow-hidden rounded" style="height:280px;">
+                                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&amp;w=800&amp;auto=format&amp;fit=crop" class="w-100 h-100" style="object-fit:cover; transition:transform 0.4s;" alt="Campus Library"/>
+                                    <div class="position-absolute bottom-0 start-0 end-0 p-3" style="background:linear-gradient(transparent,rgba(15,23,42,0.85));">
+                                        <p class="text-white mb-0 fw-bold" style="font-size:0.85rem; letter-spacing:1px;">LIBRARY &amp; RESEARCH</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="position-relative overflow-hidden rounded" style="height:280px;">
+                                    <img src="https://images.unsplash.com/photo-1562774053-701939374585?q=80&amp;w=800&amp;auto=format&amp;fit=crop" class="w-100 h-100" style="object-fit:cover; transition:transform 0.4s;" alt="Campus Grounds"/>
+                                    <div class="position-absolute bottom-0 start-0 end-0 p-3" style="background:linear-gradient(transparent,rgba(15,23,42,0.85));">
+                                        <p class="text-white mb-0 fw-bold" style="font-size:0.85rem; letter-spacing:1px;">CAMPUS GROUNDS</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="position-relative overflow-hidden rounded" style="height:280px;">
+                                    <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&amp;w=800&amp;auto=format&amp;fit=crop" class="w-100 h-100" style="object-fit:cover; transition:transform 0.4s;" alt="Laboratory"/>
+                                    <div class="position-absolute bottom-0 start-0 end-0 p-3" style="background:linear-gradient(transparent,rgba(15,23,42,0.85));">
+                                        <p class="text-white mb-0 fw-bold" style="font-size:0.85rem; letter-spacing:1px;">LABORATORIES</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="position-relative overflow-hidden rounded" style="height:280px;">
+                                    <img src="https://images.unsplash.com/photo-1544531585-9847b68c8c86?q=80&amp;w=800&amp;auto=format&amp;fit=crop" class="w-100 h-100" style="object-fit:cover; transition:transform 0.4s;" alt="Student Life"/>
+                                    <div class="position-absolute bottom-0 start-0 end-0 p-3" style="background:linear-gradient(transparent,rgba(15,23,42,0.85));">
+                                        <p class="text-white mb-0 fw-bold" style="font-size:0.85rem; letter-spacing:1px;">STUDENT LIFE</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-5">
+                            <a href="/academics" class="btn btn-amherst me-3">Explore Academic Paths</a>
+                            <a href="/campus-life" class="btn btn-outline-secondary">Discover Campus Life</a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 3: Meet Our Faculty -->
+                <section class="py-5" style="background:#fff;">
+                    <div class="container py-3">
+                        <div class="row text-center mb-5">
+                            <div class="col-12">
+                                <p class="text-uppercase mb-2" style="letter-spacing:3px; font-size:0.75rem; color:#8a8680;">Our People</p>
+                                <h2 class="amherst-heading">Meet Our Faculty &amp; Leadership</h2>
+                                <p style="color:#8a8680; max-width:550px; margin:0.75rem auto 0;">Visionary educators and researchers dedicated to academic excellence.</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <t t-foreach="teachers" t-as="teacher">
+                                <div class="col-md-6 col-lg-4 mb-4">
+                                    <div class="amherst-card text-center h-100">
+                                        <t t-if="teacher.image_1920">
+                                            <img t-att-src="'/web/image/student.teacher/' + str(teacher.id) + '/image_1920'" class="rounded-circle mb-3" style="width:80px;height:80px;object-fit:cover;border:3px solid #4a0e17;" t-att-alt="teacher.name"/>
+                                        </t>
+                                        <t t-else="">
+                                            <div class="rounded-circle mb-3 d-inline-flex align-items-center justify-content-center" style="width:80px;height:80px;background:#4a0e17;">
+                                                <i class="fa fa-user fa-2x text-white"/>
+                                            </div>
+                                        </t>
+                                        <h5 class="amherst-heading mb-1" style="font-size:1rem;"><t t-esc="teacher.name"/></h5>
+                                        <p style="color:#8a8680; font-size:0.8rem; text-transform:uppercase; letter-spacing:1px;"><t t-esc="teacher.specialization or 'Faculty'"/></p>
+                                        <t t-if="teacher.email">
+                                            <a t-att-href="'mailto:' + teacher.email" style="color:#4a0e17; font-size:0.85rem;"><i class="fa fa-envelope me-1"/><t t-esc="teacher.email"/></a>
+                                        </t>
+                                    </div>
+                                </div>
+                            </t>
+                            <t t-if="not teachers">
+                                <div class="col-12 text-center py-5">
+                                    <p style="color:#8a8680;">Faculty profiles will appear here once added from the backend.</p>
+                                    <a href="/school/admissions" class="btn btn-amherst mt-2">Contact Admissions</a>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- ACADEMICS PAGE — INSTITUTIONAL SHOWCASE                      -->
+    <!-- ============================================================ -->
+    <template id="academics_page" name="Academic Excellence">
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="False"/>
+            <t t-set="no_footer" t-value="False"/>
+            <div id="wrap" class="oe_structure oe_empty">
+
+                <!-- HERO HEADER -->
+                <section class="amherst-page-header text-center" style="background:linear-gradient(rgba(15,23,42,0.65),rgba(74,14,23,0.55)),url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&amp;w=2000&amp;auto=format&amp;fit=crop') center/cover no-repeat !important; padding:100px 0 !important;">
+                    <div class="container">
+                        <p class="text-uppercase mb-2 amherst-kicker amherst-reveal" style="letter-spacing:3px; font-size:0.8rem; color:rgba(255,255,255,0.7);">Excellence &amp; Innovation</p>
+                        <h1 class="amherst-heading amherst-hero-title" style="color:#ffffff !important;"><span>Academic</span> <span>Excellence</span></h1>
+                        <p class="mt-3 amherst-reveal" style="color:rgba(255,255,255,0.85); font-size:1.05rem; max-width:600px; margin:0 auto;">Shaping tomorrow's leaders through rigorous scholarship, pioneering research, and an unwavering commitment to transformative education.</p>
+                    </div>
+                </section>
+
+                <!-- ============================================ -->
+                <!-- SECTION 1: ACADEMIC MILESTONES &amp; ACCREDITATION -->
+                <!-- ============================================ -->
+                <section class="py-5" style="background:#ffffff;">
+                    <div class="container">
+                        <div class="row mb-4 align-items-end">
+                            <div class="col-lg-6">
+                                <p class="text-uppercase mb-1 amherst-kicker amherst-reveal" style="letter-spacing:3px; font-size:0.7rem; color:#8a8680;">Our Track Record</p>
+                                <h2 class="amherst-heading amherst-reveal">Milestones &amp; Accreditation</h2>
+                            </div>
+                            <div class="col-lg-6">
+                                <p class="amherst-reveal" style="color:#5a5a5a; font-size:0.95rem; line-height:1.7;">NextGen Academy maintains the highest standards of academic rigor, validated by national accreditation bodies and consistently recognized for educational excellence across Ethiopia.</p>
+                            </div>
+                        </div>
+
+                        <!-- Stats Ribbon -->
+                        <div class="row text-center mt-4 amherst-border-bottom pb-5">
+                            <div class="col-6 col-md-3 mb-4 amherst-reveal">
+                                <div class="amherst-stat-num" style="font-family:'Playfair Display',Georgia,serif; font-size:2.8rem; font-weight:800; color:#4a0e17;" data-target="98">0</div>
+                                <p style="text-transform:uppercase; font-size:0.7rem; letter-spacing:2px; color:#8a8680;">% National Exam Pass Rate</p>
+                            </div>
+                            <div class="col-6 col-md-3 mb-4 amherst-reveal">
+                                <div class="amherst-stat-num" style="font-family:'Playfair Display',Georgia,serif; font-size:2.8rem; font-weight:800; color:#4a0e17;" data-target="12">0</div>
+                                <p style="text-transform:uppercase; font-size:0.7rem; letter-spacing:2px; color:#8a8680;">National Excellence Awards</p>
+                            </div>
+                            <div class="col-6 col-md-3 mb-4 amherst-reveal">
+                                <div class="amherst-stat-num" style="font-family:'Playfair Display',Georgia,serif; font-size:2.8rem; font-weight:800; color:#4a0e17;" data-target="45">0</div>
+                                <p style="text-transform:uppercase; font-size:0.7rem; letter-spacing:2px; color:#8a8680;">Accredited Programs</p>
+                            </div>
+                            <div class="col-6 col-md-3 mb-4 amherst-reveal">
+                                <div class="amherst-stat-num" style="font-family:'Playfair Display',Georgia,serif; font-size:2.8rem; font-weight:800; color:#4a0e17;" data-target="3">0</div>
+                                <p style="text-transform:uppercase; font-size:0.7rem; letter-spacing:2px; color:#8a8680;">International Partnerships</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================ -->
+                <!-- SECTION 2: DEPARTMENTAL SPOTLIGHTS            -->
+                <!-- ============================================ -->
+                <section class="py-5" style="background:#f8f6f3;">
+                    <div class="container">
+                        <div class="text-center mb-5">
+                            <p class="text-uppercase mb-1 amherst-kicker amherst-reveal" style="letter-spacing:3px; font-size:0.7rem; color:#8a8680;">Centers of Learning</p>
+                            <h2 class="amherst-heading amherst-reveal">Departmental Spotlights</h2>
+                            <p class="amherst-reveal" style="color:#5a5a5a; font-size:0.95rem; max-width:600px; margin:0.75rem auto 0;">Our faculties blend theory with practice, preparing students for leadership across diverse disciplines.</p>
+                        </div>
+                        <div class="row g-4">
+                            <!-- Engineering -->
+                            <div class="col-lg-4 col-md-6 amherst-reveal">
+                                <div class="amherst-card h-100 text-center">
+                                    <div style="width:56px; height:56px; border-radius:50%; background:rgba(74,14,23,0.08); display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+                                        <i class="fa fa-2x fa-cogs" style="color:#4a0e17;"></i>
+                                    </div>
+                                    <h4 class="amherst-heading" style="font-size:1.05rem;">Engineering &amp; Technology</h4>
+                                    <p style="color:#5a5a5a; font-size:0.88rem; line-height:1.7;">State-of-the-art labs and project-based curricula in civil, electrical, and software engineering prepare graduates for Ethiopia's booming tech sector.</p>
+                                </div>
+                            </div>
+                            <!-- Business -->
+                            <div class="col-lg-4 col-md-6 amherst-reveal">
+                                <div class="amherst-card h-100 text-center">
+                                    <div style="width:56px; height:56px; border-radius:50%; background:rgba(74,14,23,0.08); display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+                                        <i class="fa fa-2x fa-line-chart" style="color:#4a0e17;"></i>
+                                    </div>
+                                    <h4 class="amherst-heading" style="font-size:1.05rem;">Business &amp; Economics</h4>
+                                    <p style="color:#5a5a5a; font-size:0.88rem; line-height:1.7;">Case-study pedagogy and entrepreneurship incubators develop strategic thinkers ready to drive economic growth and innovation.</p>
+                                </div>
+                            </div>
+                            <!-- Sciences -->
+                            <div class="col-lg-4 col-md-6 amherst-reveal">
+                                <div class="amherst-card h-100 text-center">
+                                    <div style="width:56px; height:56px; border-radius:50%; background:rgba(74,14,23,0.08); display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+                                        <i class="fa fa-2x fa-flask" style="color:#4a0e17;"></i>
+                                    </div>
+                                    <h4 class="amherst-heading" style="font-size:1.05rem;">Natural Sciences</h4>
+                                    <p style="color:#5a5a5a; font-size:0.88rem; line-height:1.7;">Hands-on research in biology, chemistry, and environmental science, with a focus on sustainable solutions for East Africa.</p>
+                                </div>
+                            </div>
+                            <!-- Humanities -->
+                            <div class="col-lg-4 col-md-6 amherst-reveal">
+                                <div class="amherst-card h-100 text-center">
+                                    <div style="width:56px; height:56px; border-radius:50%; background:rgba(74,14,23,0.08); display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+                                        <i class="fa fa-2x fa-book" style="color:#4a0e17;"></i>
+                                    </div>
+                                    <h4 class="amherst-heading" style="font-size:1.05rem;">Humanities &amp; Social Sciences</h4>
+                                    <p style="color:#5a5a5a; font-size:0.88rem; line-height:1.7;">Critical inquiry into history, philosophy, and sociology cultivates empathetic leaders who understand cultural complexity.</p>
+                                </div>
+                            </div>
+                            <!-- Health Sciences -->
+                            <div class="col-lg-4 col-md-6 amherst-reveal">
+                                <div class="amherst-card h-100 text-center">
+                                    <div style="width:56px; height:56px; border-radius:50%; background:rgba(74,14,23,0.08); display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+                                        <i class="fa fa-2x fa-heartbeat" style="color:#4a0e17;"></i>
+                                    </div>
+                                    <h4 class="amherst-heading" style="font-size:1.05rem;">Health Sciences</h4>
+                                    <p style="color:#5a5a5a; font-size:0.88rem; line-height:1.7;">Pre-medical and public health programs that address community health challenges through evidence-based practice.</p>
+                                </div>
+                            </div>
+                            <!-- Creative Arts -->
+                            <div class="col-lg-4 col-md-6 amherst-reveal">
+                                <div class="amherst-card h-100 text-center">
+                                    <div style="width:56px; height:56px; border-radius:50%; background:rgba(74,14,23,0.08); display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+                                        <i class="fa fa-2x fa-paint-brush" style="color:#4a0e17;"></i>
+                                    </div>
+                                    <h4 class="amherst-heading" style="font-size:1.05rem;">Creative Arts &amp; Design</h4>
+                                    <p style="color:#5a5a5a; font-size:0.88rem; line-height:1.7;">Studio-based programs in visual arts, graphic design, and multimedia that foster creative expression and design thinking.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================ -->
+                <!-- SECTION 3: FEATURED RESEARCH &amp; STUDENT PROJECTS -->
+                <!-- ============================================ -->
+                <section class="py-5" style="background:#ffffff;">
+                    <div class="container">
+                        <div class="row mb-5 align-items-end">
+                            <div class="col-lg-6">
+                                <p class="text-uppercase mb-1 amherst-kicker amherst-reveal" style="letter-spacing:3px; font-size:0.7rem; color:#8a8680;">Innovation at Work</p>
+                                <h2 class="amherst-heading amherst-reveal">Featured Research &amp; Student Projects</h2>
+                            </div>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6 amherst-reveal">
+                                <div class="amherst-card h-100" style="border-left:3px solid #4a0e17 !important;">
+                                    <p class="text-uppercase mb-2" style="font-size:0.7rem; letter-spacing:2px; color:#8a8680;">Student Research — Engineering</p>
+                                    <h4 class="amherst-heading" style="font-size:1.05rem;">Solar-Powered Water Purification System</h4>
+                                    <p style="color:#5a5a5a; font-size:0.9rem; line-height:1.7;">A team of Grade 12 students designed and prototyped a low-cost solar water purifier that can serve rural communities, winning the 2024 National Science Fair gold medal.</p>
+                                    <span style="color:#4a0e17; font-size:0.8rem; font-weight:600;">National Science Fair — Gold Medal 2024</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 amherst-reveal">
+                                <div class="amherst-card h-100" style="border-left:3px solid #4a0e17 !important;">
+                                    <p class="text-uppercase mb-2" style="font-size:0.7rem; letter-spacing:2px; color:#8a8680;">Faculty Research — AI</p>
+                                    <h4 class="amherst-heading" style="font-size:1.05rem;">AI-Driven Early Warning for Learning Gaps</h4>
+                                    <p style="color:#5a5a5a; font-size:0.9rem; line-height:1.7;">Our Computer Science faculty developed a machine learning model that identifies at-risk students early in the semester, enabling targeted interventions that improved pass rates by 22%.</p>
+                                    <span style="color:#4a0e17; font-size:0.8rem; font-weight:600;">Published in East African Journal of Education Technology</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 amherst-reveal">
+                                <div class="amherst-card h-100" style="border-left:3px solid #4a0e17 !important;">
+                                    <p class="text-uppercase mb-2" style="font-size:0.7rem; letter-spacing:2px; color:#8a8680;">Student Research — Health Sciences</p>
+                                    <h4 class="amherst-heading" style="font-size:1.05rem;">Community Health Mapping Initiative</h4>
+                                    <p style="color:#5a5a5a; font-size:0.9rem; line-height:1.7;">Health Sciences students partnered with local clinics to create digital health maps of underserved neighborhoods, improving resource allocation for maternal and child healthcare.</p>
+                                    <span style="color:#4a0e17; font-size:0.8rem; font-weight:600;">Ministry of Health — Community Impact Award</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 amherst-reveal">
+                                <div class="amherst-card h-100" style="border-left:3px solid #4a0e17 !important;">
+                                    <p class="text-uppercase mb-2" style="font-size:0.7rem; letter-spacing:2px; color:#8a8680;">Student Project — Business</p>
+                                    <h4 class="amherst-heading" style="font-size:1.05rem;">EthioTrade Marketplace App</h4>
+                                    <p style="color:#5a5a5a; font-size:0.9rem; line-height:1.7;">Our Business &amp; Technology incubator produced a mobile marketplace connecting smallholder farmers to urban buyers, currently serving over 500 active users in Addis Ababa.</p>
+                                    <span style="color:#4a0e17; font-size:0.8rem; font-weight:600;">StartUp Ethiopia — Finalist 2024</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================ -->
+                <!-- SECTION 4: GRADUATE SUCCESS STORIES           -->
+                <!-- ============================================ -->
+                <section class="py-5" style="background:#f8f6f3;">
+                    <div class="container">
+                        <div class="text-center mb-5">
+                            <p class="text-uppercase mb-1 amherst-kicker amherst-reveal" style="letter-spacing:3px; font-size:0.7rem; color:#8a8680;">Where Our Graduates Go</p>
+                            <h2 class="amherst-heading amherst-reveal">Graduate Success Stories</h2>
+                            <p class="amherst-reveal" style="color:#5a5a5a; font-size:0.95rem; max-width:560px; margin:0.75rem auto 0;">Our alumni are making an impact at leading universities and organizations worldwide.</p>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-4 amherst-reveal">
+                                <div class="amherst-card h-100 text-center">
+                                    <div style="width:64px; height:64px; border-radius:50%; background:#4a0e17; color:#fff; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem; font-family:'Playfair Display',Georgia,serif; font-size:1.4rem; font-weight:800;">SA</div>
+                                    <h4 class="amherst-heading" style="font-size:1rem;">Sara Alemayehu</h4>
+                                    <p style="color:#4a0e17; font-size:0.78rem; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:0.75rem;">Class of 2023</p>
+                                    <p style="color:#5a5a5a; font-size:0.88rem; line-height:1.6;">Accepted to Addis Ababa University with a full scholarship in Computer Science. Now interning at a leading fintech startup.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 amherst-reveal">
+                                <div class="amherst-card h-100 text-center">
+                                    <div style="width:64px; height:64px; border-radius:50%; background:#4a0e17; color:#fff; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem; font-family:'Playfair Display',Georgia,serif; font-size:1.4rem; font-weight:800;">DT</div>
+                                    <h4 class="amherst-heading" style="font-size:1rem;">Dawit Tadesse</h4>
+                                    <p style="color:#4a0e17; font-size:0.78rem; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:0.75rem;">Class of 2022</p>
+                                    <p style="color:#5a5a5a; font-size:0.88rem; line-height:1.6;">Graduated from Hawassa University in Mechanical Engineering. Currently working as a junior engineer at an infrastructure development firm.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 amherst-reveal">
+                                <div class="amherst-card h-100 text-center">
+                                    <div style="width:64px; height:64px; border-radius:50%; background:#4a0e17; color:#fff; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem; font-family:'Playfair Display',Georgia,serif; font-size:1.4rem; font-weight:800;">HM</div>
+                                    <h4 class="amherst-heading" style="font-size:1rem;">Helen Mekonen</h4>
+                                    <p style="color:#4a0e17; font-size:0.78rem; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:0.75rem;">Class of 2023</p>
+                                    <p style="color:#5a5a5a; font-size:0.88rem; line-height:1.6;">Studying Medicine at Jimma University on merit. Aspires to become a surgeon specializing in pediatric care for underserved regions.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CTA: EXPLORE COURSES -->
+                <section class="py-5 text-center" style="background:#0f0f0f; color:#ffffff;">
+                    <div class="container amherst-reveal">
+                        <p class="text-uppercase mb-2" style="letter-spacing:3px; font-size:0.7rem; color:rgba(255,255,255,0.5);">Take the Next Step</p>
+                        <h2 class="amherst-heading mb-3" style="color:#ffffff !important; font-size:2rem;">Ready to Begin Your Journey?</h2>
+                        <p style="color:rgba(255,255,255,0.7); font-size:0.95rem; max-width:480px; margin:0 auto 1.5rem;">Explore our full course catalogue or start your application today.</p>
+                        <a href="/courses" class="btn btn-amherst me-2" style="background:#ffffff !important; color:#4a0e17 !important;">Browse Courses</a>
+                        <a href="/school/admissions" class="btn btn-amherst" style="border:1px solid rgba(255,255,255,0.3) !important; background:transparent !important;">Apply Now</a>
+                    </div>
+                </section>
+
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- RESEARCH PAGE                                                -->
+    <!-- ============================================================ -->
+    <template id="research_page" name="Research">
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="False"/>
+            <t t-set="no_footer" t-value="False"/>
+            <div id="wrap" class="oe_structure oe_empty">
+                <section class="amherst-page-header text-center" style="background:linear-gradient(rgba(15,23,42,0.7),rgba(15,23,42,0.7)),url('https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&amp;w=2000&amp;auto=format&amp;fit=crop') center/cover no-repeat !important;">
+                    <div class="container">
+                        <p class="text-uppercase mb-2 amherst-kicker" style="letter-spacing:3px; font-size:0.8rem; color:rgba(255,255,255,0.7);">Innovation &amp; Discovery</p>
+                        <h1 class="amherst-heading amherst-hero-title" style="color:#ffffff !important;"><span>Research</span></h1>
+                    </div>
+                </section>
+
+                <section class="py-5">
+                    <div class="container">
+                        <div class="row py-4">
+                            <div class="col-md-8 offset-md-2 text-center">
+                                <h2 class="amherst-heading mb-4">Pushing Boundaries</h2>
+                                <p class="lh-lg" style="color:#5a5a5a; font-size:1.05rem;">
+                                    Our research initiatives are driven by a passion for discovery and a commitment
+                                    to addressing the world's most pressing challenges. From AI-powered education
+                                    technologies to sustainable development, our faculty and students collaborate
+                                    on work that creates real impact.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="py-5 amherst-border-bottom" style="background-color:#ffffff;">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4 mb-4">
+                                <div class="amherst-card text-center h-100">
+                                    <i class="fa fa-3x fa-cogs mb-3" style="color:#4a0e17;"></i>
+                                    <h4 class="amherst-heading" style="font-size:1rem;">AI &amp; Machine Learning</h4>
+                                    <p style="color:#5a5a5a; font-size:0.9rem;">Pioneering intelligent systems that transform educational outcomes and administrative efficiency.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-4">
+                                <div class="amherst-card text-center h-100">
+                                    <i class="fa fa-3x fa-leaf mb-3" style="color:#4a0e17;"></i>
+                                    <h4 class="amherst-heading" style="font-size:1rem;">Sustainable Development</h4>
+                                    <p style="color:#5a5a5a; font-size:0.9rem;">Research driving environmental sustainability and equitable economic growth across East Africa.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-4">
+                                <div class="amherst-card text-center h-100">
+                                    <i class="fa fa-3x fa-book mb-3" style="color:#4a0e17;"></i>
+                                    <h4 class="amherst-heading" style="font-size:1rem;">Humanities &amp; Social Sciences</h4>
+                                    <p style="color:#5a5a5a; font-size:0.9rem;">Exploring the cultural, historical, and social dimensions that shape our collective future.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- CAMPUS LIFE PAGE                                             -->
+    <!-- ============================================================ -->
+    <!-- ============================================================ -->
+    <!-- CAMPUS LIFE PAGE — Dynamic from DB                           -->
+    <!-- ============================================================ -->
+    <template id="campus_life_page" name="Campus Life">
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="False"/>
+            <t t-set="no_footer" t-value="False"/>
+            <div id="wrap" class="oe_structure oe_empty">
+
+                <!-- HERO -->
+                <section class="amherst-page-header text-center" style="background:linear-gradient(rgba(15,23,42,0.65),rgba(74,14,23,0.6)),url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&amp;w=2000&amp;auto=format&amp;fit=crop') center/cover no-repeat !important;">
+                    <div class="container">
+                        <p class="text-uppercase mb-2 amherst-kicker" style="letter-spacing:3px; font-size:0.8rem; color:rgba(255,255,255,0.7);">Student Experience</p>
+                        <h1 class="amherst-heading amherst-hero-title" style="color:#ffffff !important;"><span>Campus</span> <span>Life</span></h1>
+                        <p class="mt-3" style="color:rgba(255,255,255,0.85); font-size:1.1rem;">Experience a campus alive with creativity, competition, culture, and community.</p>
+                    </div>
+                </section>
+
+                <!-- CATEGORY SECTIONS (dynamic) -->
+                <t t-foreach="categories" t-as="cat">
+                    <t t-set="cat_key" t-value="cat[0]"/>
+                    <t t-set="cat_label" t-value="cat[1]"/>
+                    <t t-set="cat_activities" t-value="activities.filtered(lambda a: a.category == cat_key)"/>
+                    <t t-if="cat_activities">
+                        <section class="py-5" t-att-style="'background:#f8f6f3;' if cat_index % 2 == 0 else 'background:#fff;'">
+                            <div class="container">
+                                <div class="row mb-4 align-items-end">
+                                    <div class="col">
+                                        <p class="text-uppercase mb-1" style="letter-spacing:3px; font-size:0.7rem; color:#8a8680;">Campus Life</p>
+                                        <h2 class="amherst-heading mb-0"><t t-esc="cat_label"/></h2>
+                                    </div>
+                                </div>
+                                <div class="row g-4">
+                                    <t t-foreach="cat_activities" t-as="activity">
+                                        <div class="col-md-6 col-lg-4">
+                                            <a t-attf-href="/campus-life/#{activity.id}" style="text-decoration:none; color:inherit;">
+                                                <div class="amherst-card h-100 p-0 overflow-hidden" style="transition:transform 0.3s, box-shadow 0.3s;">
+                                                    <!-- Cover Image -->
+                                                    <div style="height:200px; overflow:hidden; position:relative;">
+                                                        <t t-if="activity.cover_image">
+                                                            <img t-att-src="'/web/image/campus.life.activity/' + str(activity.id) + '/cover_image'" class="w-100 h-100" style="object-fit:cover; transition:transform 0.4s;" t-att-alt="activity.name"/>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background:linear-gradient(135deg,#4a0e17,#8b1a2e);">
+                                                                <i class="fa fa-image fa-3x text-white opacity-50"/>
+                                                            </div>
+                                                        </t>
+                                                        <span class="position-absolute top-0 end-0 m-2 badge" style="background:#4a0e17; font-size:0.65rem; letter-spacing:1px;"><t t-esc="cat_label"/></span>
+                                                    </div>
+                                                    <!-- Card Body -->
+                                                    <div class="p-4">
+                                                        <h5 class="amherst-heading mb-2" style="font-size:1rem;"><t t-esc="activity.name"/></h5>
+                                                        <p style="color:#5a5a5a; font-size:0.88rem; line-height:1.7;">
+                                                            <t t-if="activity.summary"><t t-esc="activity.summary"/></t>
+                                                            <t t-else="">Discover more about this exciting campus activity.</t>
+                                                        </p>
+                                                        <span style="color:#4a0e17; font-size:0.85rem; font-weight:600;">Read More <i class="fa fa-arrow-right ms-1"/></span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </section>
+                    </t>
+                </t>
+
+                <!-- Fallback if no activities published -->
+                <t t-if="not activities">
+                    <section class="py-5">
+                        <div class="container text-center py-5">
+                            <i class="fa fa-4x fa-users mb-4" style="color:#4a0e17; opacity:0.3;"/>
+                            <h3 class="amherst-heading mb-3">Activities Coming Soon</h3>
+                            <p style="color:#8a8680; max-width:500px; margin:0 auto;">Our campus life activities will be published here. Check back soon!</p>
+                        </div>
+                    </section>
+                </t>
+
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- CAMPUS LIFE DETAIL PAGE                                      -->
+    <!-- ============================================================ -->
+    <template id="campus_life_detail_page" name="Campus Life Detail">
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="False"/>
+            <t t-set="no_footer" t-value="False"/>
+            <div id="wrap" class="oe_structure oe_empty">
+
+                <!-- MINI HERO -->
+                <section class="py-5 text-center" style="background:linear-gradient(rgba(15,23,42,0.75),rgba(74,14,23,0.65)),url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&amp;w=2000&amp;auto=format&amp;fit=crop') center/cover no-repeat; min-height:260px; display:flex; align-items:center;">
+                    <div class="container">
+                        <nav aria-label="breadcrumb" class="mb-3">
+                            <ol class="breadcrumb justify-content-center" style="background:none;">
+                                <li class="breadcrumb-item"><a href="/campus-life" style="color:rgba(255,255,255,0.7);">Campus Life</a></li>
+                                <li class="breadcrumb-item active text-white"><t t-esc="activity.name"/></li>
+                            </ol>
+                        </nav>
+                        <p class="text-uppercase mb-2" style="letter-spacing:3px; font-size:0.75rem; color:rgba(255,255,255,0.7);"><t t-esc="dict([('clubs','Student Clubs'),('athletics','Athletics'),('arts','Arts &amp; Culture'),('housing','Housing')]).get(activity.category, '')"/></p>
+                        <h1 class="amherst-heading" style="color:#ffffff; font-size:2.2rem;"><t t-esc="activity.name"/></h1>
+                    </div>
+                </section>
+
+                <!-- MAIN CONTENT -->
+                <section class="py-5">
+                    <div class="container">
+                        <div class="row">
+
+                            <!-- Left: Cover + Description -->
+                            <div class="col-lg-8 mb-5">
+                                <t t-if="activity.cover_image">
+                                    <img t-att-src="'/web/image/campus.life.activity/' + str(activity.id) + '/cover_image'" class="w-100 rounded mb-4" style="max-height:420px; object-fit:cover;" t-att-alt="activity.name"/>
+                                </t>
+
+                                <t t-if="activity.description">
+                                    <div class="amherst-card p-4">
+                                        <h4 class="amherst-heading mb-3" style="font-size:1.1rem;">About This Activity</h4>
+                                        <div t-field="activity.description" style="color:#5a5a5a; line-height:1.85;"/>
+                                    </div>
+                                </t>
+                                <t t-elif="activity.summary">
+                                    <div class="amherst-card p-4">
+                                        <p style="color:#5a5a5a; font-size:1rem; line-height:1.85;"><t t-esc="activity.summary"/></p>
+                                    </div>
+                                </t>
+
+                                <!-- Video embed -->
+                                <t t-if="activity.video_url">
+                                    <div class="mt-4">
+                                        <h5 class="amherst-heading mb-3" style="font-size:1rem;">Watch</h5>
+                                        <div class="ratio ratio-16x9">
+                                            <iframe t-att-src="activity.video_url" allowfullscreen="allowfullscreen" style="border:none; border-radius:8px;"/>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+
+                            <!-- Right: Gallery sidebar -->
+                            <div class="col-lg-4">
+                                <div class="amherst-card p-3 mb-4">
+                                    <h5 class="amherst-heading mb-3" style="font-size:0.9rem; text-transform:uppercase; letter-spacing:2px;">Gallery</h5>
+                                    <div class="row g-2">
+                                        <t t-foreach="[activity.gallery_image_1, activity.gallery_image_2, activity.gallery_image_3, activity.gallery_image_4]" t-as="img_field">
+                                            <t t-set="img_names" t-value="['gallery_image_1','gallery_image_2','gallery_image_3','gallery_image_4']"/>
+                                        </t>
+                                        <t t-if="activity.gallery_image_1">
+                                            <div class="col-6">
+                                                <img t-att-src="'/web/image/campus.life.activity/' + str(activity.id) + '/gallery_image_1'" class="w-100 rounded" style="height:110px;object-fit:cover;" alt="Gallery 1"/>
+                                            </div>
+                                        </t>
+                                        <t t-if="activity.gallery_image_2">
+                                            <div class="col-6">
+                                                <img t-att-src="'/web/image/campus.life.activity/' + str(activity.id) + '/gallery_image_2'" class="w-100 rounded" style="height:110px;object-fit:cover;" alt="Gallery 2"/>
+                                            </div>
+                                        </t>
+                                        <t t-if="activity.gallery_image_3">
+                                            <div class="col-6">
+                                                <img t-att-src="'/web/image/campus.life.activity/' + str(activity.id) + '/gallery_image_3'" class="w-100 rounded" style="height:110px;object-fit:cover;" alt="Gallery 3"/>
+                                            </div>
+                                        </t>
+                                        <t t-if="activity.gallery_image_4">
+                                            <div class="col-6">
+                                                <img t-att-src="'/web/image/campus.life.activity/' + str(activity.id) + '/gallery_image_4'" class="w-100 rounded" style="height:110px;object-fit:cover;" alt="Gallery 4"/>
+                                            </div>
+                                        </t>
+                                        <t t-if="not activity.gallery_image_1 and not activity.gallery_image_2 and not activity.gallery_image_3 and not activity.gallery_image_4">
+                                            <div class="col-12 text-center py-4">
+                                                <p style="color:#8a8680; font-size:0.85rem;">No gallery images yet.</p>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+                                <a href="/campus-life" class="btn btn-amherst w-100"><i class="fa fa-arrow-left me-2"/>Back to Campus Life</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- COURSES PAGE                                                 -->
+    <!-- ============================================================ -->
+    <template id="courses_page" name="Courses">
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="False"/>
+            <t t-set="no_footer" t-value="False"/>
+            <div id="wrap" class="oe_structure oe_empty">
+
+                <section class="amherst-page-header text-center" style="background:linear-gradient(rgba(15,23,42,0.7),rgba(74,14,23,0.6)),url('https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&amp;w=2000&amp;auto=format&amp;fit=crop') center/cover no-repeat !important;">
+                    <div class="container">
+                        <p class="text-uppercase mb-2 amherst-kicker amherst-reveal" style="letter-spacing:3px; font-size:0.8rem; color:rgba(255,255,255,0.7);">Programs &amp; Curricula</p>
+                        <h1 class="amherst-heading amherst-hero-title" style="color:#ffffff !important;"><span>Our</span> <span>Courses</span></h1>
+                        <p class="mt-3 amherst-reveal" style="color:rgba(255,255,255,0.85); font-size:1.05rem;">Explore our full range of active programs designed to unlock your academic potential.</p>
+                    </div>
+                </section>
+
+                <section class="py-5" style="background:#f8f6f3;">
+                    <div class="container">
+                        <div class="row">
+                            <t t-foreach="courses" t-as="course">
+                                <div class="col-lg-4 col-md-6 mb-4 amherst-reveal">
+                                    <div class="amherst-card h-100 d-flex flex-column" style="transition:transform 0.3s, box-shadow 0.3s;">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span class="badge" style="background:rgba(74,14,23,0.1); color:#4a0e17; font-weight:700; font-size:0.75rem; letter-spacing:1px;">
+                                                <t t-if="course.code"><t t-esc="course.code"/></t>
+                                                <t t-else="">COURSE</t>
+                                            </span>
+                                            <t t-if="course.grade">
+                                                <span style="font-size:0.75rem; color:#8a8680; text-transform:uppercase;">
+                                                    <t t-esc="dict(course._fields['grade'].selection).get(course.grade, '')"/>
+                                                </span>
+                                            </t>
+                                        </div>
+
+                                        <h4 class="amherst-heading mb-2" style="font-size:1.1rem; color:#0f0f0f !important;"><t t-esc="course.name"/></h4>
+
+                                        <t t-if="course.teacher_id">
+                                            <p class="mb-2" style="font-size:0.82rem; color:#4a0e17; font-weight:600;">
+                                                <i class="fa fa-user-circle me-1"/> Instructor: <t t-esc="course.teacher_id.name"/>
+                                            </p>
+                                        </t>
+
+                                        <t t-if="course.duration">
+                                            <p class="mb-2" style="font-size:0.8rem; color:#8a8680;">
+                                                <i class="fa fa-clock-o me-1"/> Duration: <t t-esc="course.duration"/> <t t-esc="dict(course._fields['duration_unit'].selection).get(course.duration_unit, '') if course.duration_unit else ''"/>
+                                            </p>
+                                        </t>
+
+                                        <p style="color:#5a5a5a; font-size:0.88rem; line-height:1.7;">
+                                            <t t-if="course.description"><t t-esc="course.description"/></t>
+                                            <t t-else="">A comprehensive program designed to build deep expertise and practical skills in this discipline.</t>
+                                        </p>
+
+                                        <div class="mt-auto pt-3 d-flex gap-2">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm w-50"
+                                                    data-amherst-quickview="1"
+                                                    t-att-data-title="course.name"
+                                                    t-att-data-code="course.code or ''"
+                                                    t-att-data-instructor="course.teacher_id.name if course.teacher_id else 'Faculty Lead'"
+                                                    t-att-data-duration="(str(course.duration) + ' ' + (course.duration_unit or 'months')) if course.duration else '1 Term'"
+                                                    t-att-data-description="course.description or 'A comprehensive program designed to build deep expertise and practical skills.'"
+                                                    style="font-size:0.8rem; text-transform:uppercase;">
+                                                Quick View
+                                            </button>
+                                            <a href="/school/admissions" class="btn btn-amherst w-50" style="font-size:0.8rem;">Apply</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                            <t t-if="not courses">
+                                <div class="col-12 text-center py-5 amherst-reveal">
+                                    <i class="fa fa-4x fa-book mb-4" style="color:#4a0e17; opacity:0.3;"/>
+                                    <h3 class="amherst-heading mb-3">Courses Coming Soon</h3>
+                                    <p style="color:#8a8680;">Our course catalogue is being updated. Contact admissions for more information.</p>
+                                    <a href="/school/admissions" class="btn btn-amherst mt-3">Contact Admissions</a>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- CONTACT PAGE                                                 -->
+    <!-- ============================================================ -->
+    <template id="contact_page" name="Contact">
+        <t t-call="website.layout">
+            <t t-set="no_header" t-value="False"/>
+            <t t-set="no_footer" t-value="False"/>
+            <div id="wrap" class="oe_structure oe_empty">
+                <section class="amherst-page-header text-center" style="background:linear-gradient(rgba(15,23,42,0.7),rgba(15,23,42,0.7)),url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&amp;w=2000&amp;auto=format&amp;fit=crop') center/cover no-repeat !important;">
+                    <div class="container">
+                        <p class="text-uppercase mb-2 amherst-kicker" style="letter-spacing:3px; font-size:0.8rem; color:rgba(255,255,255,0.7);">We're Here to Help</p>
+                        <h1 class="amherst-heading amherst-hero-title" style="color:#ffffff !important;"><span>Contact</span> <span>Us</span></h1>
+                    </div>
+                </section>
+
+                <section class="py-5">
+                    <div class="container">
+                        <div class="row py-4">
+                            <div class="col-md-4 mb-4">
+                                <div class="amherst-card text-center h-100">
+                                    <i class="fa fa-3x fa-map-marker mb-3" style="color:#4a0e17;"></i>
+                                    <h4 class="amherst-heading" style="font-size:1rem;">Visit Us</h4>
+                                    <p style="color:#5a5a5a; font-size:0.9rem;">
+                                        NextGen Academy Campus<br/>
+                                        Addis Ababa, Ethiopia
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-4">
+                                <div class="amherst-card text-center h-100">
+                                    <i class="fa fa-3x fa-envelope mb-3" style="color:#4a0e17;"></i>
+                                    <h4 class="amherst-heading" style="font-size:1rem;">Email Us</h4>
+                                    <p style="color:#5a5a5a; font-size:0.9rem;">
+                                        admissions@nextgen.edu<br/>
+                                        info@nextgen.edu
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-4">
+                                <div class="amherst-card text-center h-100">
+                                    <i class="fa fa-3x fa-phone mb-3" style="color:#4a0e17;"></i>
+                                    <h4 class="amherst-heading" style="font-size:1rem;">Call Us</h4>
+                                    <p style="color:#5a5a5a; font-size:0.9rem;">
+                                        +251 11 123 4567<br/>
+                                        Mon–Fri, 8:00 AM – 5:00 PM
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center mt-5">
+                            <div class="col-lg-8">
+                                <div class="amherst-card p-5" style="border: 1px solid var(--amherst-border);">
+                                    <div class="text-center mb-4">
+                                        <h3 class="amherst-heading mb-2">Get in Touch</h3>
+                                        <p style="color:#5a5a5a;">Submit your details below and our admissions team will contact you.</p>
+                                    </div>
+                                    <form action="/contact/submit" method="post">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label for="name" class="form-label" style="font-weight:600; font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; color:#1c1c1c;">Name *</label>
+                                                <input type="text" class="form-control" name="name" required="1" style="border-radius:0; border:1px solid #e0dad1; padding:10px;"/>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="phone" class="form-label" style="font-weight:600; font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; color:#1c1c1c;">Phone Number</label>
+                                                <input type="text" class="form-control" name="phone" style="border-radius:0; border:1px solid #e0dad1; padding:10px;"/>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="email" class="form-label" style="font-weight:600; font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; color:#1c1c1c;">Email Address *</label>
+                                                <input type="email" class="form-control" name="email" required="1" style="border-radius:0; border:1px solid #e0dad1; padding:10px;"/>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="subject" class="form-label" style="font-weight:600; font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; color:#1c1c1c;">Subject / Company</label>
+                                                <input type="text" class="form-control" name="subject" style="border-radius:0; border:1px solid #e0dad1; padding:10px;"/>
+                                            </div>
+                                            <div class="col-12">
+                                                <label for="question" class="form-label" style="font-weight:600; font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; color:#1c1c1c;">Question *</label>
+                                                <textarea class="form-control" name="question" rows="5" required="1" style="border-radius:0; border:1px solid #e0dad1; padding:10px;"></textarea>
+                                            </div>
+                                            <div class="col-12 text-center mt-4">
+                                                <button type="submit" class="btn btn-amherst px-5" style="background-color:#4A0E17 !important; border-radius:0 !important; color:#ffffff !important;">SUBMIT INQUIRY</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <template id="contact_success" name="Contact Success">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty py-5">
+                <div class="container text-center py-5">
+                    <i class="fa fa-5x fa-check-circle mb-4" style="color:#4a0e17;"></i>
+                    <h2 class="amherst-heading mb-3">Message Received</h2>
+                    <p class="mb-4" style="color:#5a5a5a; max-width:600px; margin:0 auto;">
+                        Thank you, <t t-esc="name"/>. We have received your inquiry and our team will get back to you shortly.
+                    </p>
+                    <a href="/" class="btn btn-amherst">Back to Home</a>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>

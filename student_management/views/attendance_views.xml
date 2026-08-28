@@ -22,10 +22,13 @@
         <field name="model">student.attendance</field>
         <field name="arch" type="xml">
             <list>
-                <field name="student_id"/>
-                <field name="course_id"/>
                 <field name="date"/>
-                <field name="status"/>
+                <field name="session"/>
+                <field name="student_id"/>
+                <field name="class_id"/>
+                <field name="course_id" optional="hide"/>
+                <field name="teacher_id"/>
+                <field name="status" widget="badge" decoration-success="status == 'present'" decoration-danger="status == 'absent'" decoration-warning="status == 'late'" decoration-info="status == 'excused'"/>
             </list>
         </field>
     </record>
@@ -38,14 +41,47 @@
             <form>
                 <sheet>
                     <group>
-                        <field name="student_id"/>
-                        <field name="course_id"/>
-                        <field name="date"/>
-                        <field name="status"/>
-                        <field name="note"/>
+                        <group>
+                            <field name="student_id"/>
+                            <field name="class_id"/>
+                            <field name="course_id"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="session"/>
+                            <field name="teacher_id"/>
+                            <field name="status"/>
+                        </group>
                     </group>
+                    <notebook>
+                        <page string="Behavioral Remarks">
+                            <field name="note" placeholder="Enter remarks or notes..."/>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <record id="view_attendance_graph" model="ir.ui.view">
+        <field name="name">student.attendance.graph</field>
+        <field name="model">student.attendance</field>
+        <field name="arch" type="xml">
+            <graph string="Attendance Graph">
+                <field name="class_id" type="row"/>
+                <field name="status" type="col"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_attendance_pivot" model="ir.ui.view">
+        <field name="name">student.attendance.pivot</field>
+        <field name="model">student.attendance</field>
+        <field name="arch" type="xml">
+            <pivot string="Attendance Pivot" disable_linking="True">
+                <field name="class_id" type="row"/>
+                <field name="status" type="col"/>
+            </pivot>
         </field>
     </record>
 
@@ -53,14 +89,26 @@
     <record id="action_attendance" model="ir.actions.act_window">
         <field name="name">Attendance</field>
         <field name="res_model">student.attendance</field>
-        <field name="view_mode">list,form,calendar</field>
+        <field name="view_mode">list,form,calendar,graph,pivot</field>
+    </record>
+
+    <record id="action_attendance_batch_wizard" model="ir.actions.act_window">
+        <field name="name">Batch Attendance</field>
+        <field name="res_model">attendance.batch.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
     </record>
 
     <!-- Menu -->
     <menuitem id="menu_attendance"
-              name="Attendance"
-              parent="student_menu_root"
-              action="action_attendance"
-              sequence="40"/>
+           name="Attendance"
+           parent="menu_operations_root"
+           action="action_attendance"
+           sequence="30"/>
 
+    <menuitem id="menu_batch_attendance"
+           name="Batch Attendance"
+           parent="student_management.menu_teacher_work_root"
+           action="action_attendance_batch_wizard"
+           sequence="40"/>
 </odoo>

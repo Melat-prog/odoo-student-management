@@ -1,0 +1,186 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * student_management
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-18 13:00+0000\n"
+"PO-Revision-Date: 2026-08-18 13:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+
+#. module: student_management
+#: model:ir.model,name:student_management.model_student_student
+msgid "Student"
+msgstr ""
+
+#. module: student_management
+#: model:ir.model,name:student_management.model_student_teacher
+msgid "Teacher"
+msgstr ""
+
+#. module: student_management
+#: model:ir.model,name:student_management.model_student_course
+msgid "Course"
+msgstr ""
+
+#. module: student_management
+#: model:ir.model,name:student_management.model_student_class
+msgid "Class / Section"
+msgstr ""
+
+#. module: student_management
+#: model:ir.model,name:student_management.model_student_attendance
+msgid "Student Attendance"
+msgstr ""
+
+#. module: student_management
+#: model:ir.model,name:student_management.model_student_grade
+msgid "Student Grades"
+msgstr ""
+
+#. module: student_management
+#: model:ir.model,name:student_management.model_student_exam
+msgid "Student Examination"
+msgstr ""
+
+#. module: student_management
+#: model:ir.model,name:student_management.model_student_exam_session
+msgid "Exam Session"
+msgstr ""
+
+#. module: student_management
+#: model:ir.model,name:student_management.model_admission_application
+msgid "Admission Application"
+msgstr ""
+
+#. module: student_management
+#: model:ir.model,name:student_management.model_student_parent
+msgid "Student Parent / Guardian"
+msgstr ""
+
+#. module: student_management
+#: model:ir.model,name:student_management.model_student_notice
+msgid "Student Notice Board"
+msgstr ""
+
+#. module: student_management
+#: model:ir.model,name:student_management.model_student_submission
+msgid "Student Submission"
+msgstr ""
+
+#. module: student_management
+#: model:ir.model,name:student_management.model_teacher_assignment
+msgid "Teacher Assignment"
+msgstr ""
+
+#. module: student_management
+#: model_fields:student.student,name
+msgid "Student Name"
+msgstr ""
+
+#. module: student_management
+#: model_fields:student.student,student_id
+msgid "Student ID"
+msgstr ""
+
+#. module: student_management
+#: model_fields:student.student,email
+msgid "Email"
+msgstr ""
+
+#. module: student_management
+#: model_fields:student.student,phone
+msgid "Phone"
+msgstr ""
+
+#. module: student_management
+#: model_fields:student.student,date_of_birth
+msgid "Date of Birth"
+msgstr ""
+
+#. module: student_management
+#: model_fields:student.student,gender
+msgid "Gender"
+msgstr ""
+
+#. module: student_management
+#: selection:student.student,gender:male
+msgid "Male"
+msgstr ""
+
+#. module: student_management
+#: selection:student.student,gender:female
+msgid "Female"
+msgstr ""
+
+#. module: student_management
+#: model_fields:student.student,state
+msgid "Status"
+msgstr ""
+
+#. module: student_management
+#: selection:student.student,state:draft
+msgid "Draft"
+msgstr ""
+
+#. module: student_management
+#: selection:student.student,state:enrolled
+msgid "Enrolled"
+msgstr ""
+
+#. module: student_management
+#: selection:student.student,state:graduated
+msgid "Graduated"
+msgstr ""
+
+#. module: student_management
+#: selection:student.student,state:suspended
+msgid "Suspended"
+msgstr ""
+
+#. module: student_management
+#: model_fields:student.attendance,status
+msgid "Attendance Status"
+msgstr ""
+
+#. module: student_management
+#: selection:student.attendance,status:present
+msgid "Present"
+msgstr ""
+
+#. module: student_management
+#: selection:student.attendance,status:absent
+msgid "Absent"
+msgstr ""
+
+#. module: student_management
+#: selection:student.attendance,status:late
+msgid "Late"
+msgstr ""
+
+#. module: student_management
+#: selection:student.attendance,status:excused
+msgid "Excused"
+msgstr ""
+
+#. module: student_management
+#: model_fields:student.grade,marks
+msgid "Marks Achieved"
+msgstr ""
+
+#. module: student_management
+#: model_fields:student.grade,grade_letter
+msgid "Letter Grade"
+msgstr ""
+
+#. module: student_management
+#: model_fields:student.grade,is_pass
+msgid "Passed"
+msgstr ""

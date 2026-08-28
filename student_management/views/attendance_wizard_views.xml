@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_attendance_batch_wizard_form" model="ir.ui.view">
+        <field name="name">attendance.batch.wizard.form</field>
+        <field name="model">attendance.batch.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Batch Attendance">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="class_id" options="{'no_create': True}"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="session"/>
+                            <field name="teacher_id"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Students">
+                            <field name="attendance_line_ids">
+                                <list editable="bottom" create="false" delete="false">
+                                    <field name="student_id" readonly="1"/>
+                                    <field name="status" widget="badge" decoration-success="status == 'present'" decoration-danger="status == 'absent'" decoration-warning="status == 'late'" decoration-info="status == 'excused'"/>
+                                    <field name="note" placeholder="Behavioral remark or note..."/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_mark_attendance" string="Submit Attendance" type="object" class="btn-primary" icon="fa-check"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" icon="fa-times"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_attendance_batch_wizard" model="ir.actions.act_window">
+        <field name="name">Batch Attendance</field>
+        <field name="res_model">attendance.batch.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

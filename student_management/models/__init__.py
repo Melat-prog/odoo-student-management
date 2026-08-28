@@ -6,5 +6,15 @@ from . import academic
 from . import admission
 from . import assignment
 from . import enrollment
-from . import assignment
 from . import submission
+from . import grade
+from . import notice
+from . import parent
+from . import account_move
+from . import exam
+from . import attendance_wizard
+from . import ai_utils
+from . import ai_assistant
+from . import ai_learning_assistant_wizard
+from . import dashboard
+from . import campus_life

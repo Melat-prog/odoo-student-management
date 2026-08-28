@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!--
+            Student ID Sequence
+            Generates IDs in the format: STD/00001, STD/00002, ...
+            noupdate=1 means this record is only created during fresh install,
+            not overwritten on module upgrade (preserving existing counter).
+        -->
+        <record id="sequence_student_id" model="ir.sequence">
+            <field name="name">Student ID Sequence</field>
+            <field name="code">student.student</field>
+            <field name="prefix">STD/</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Admission Application Sequence: ADM/00001, ADM/00002, ... -->
+        <record id="sequence_admission_id" model="ir.sequence">
+            <field name="name">Admission Application Sequence</field>
+            <field name="code">admission.application</field>
+            <field name="prefix">ADM/</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

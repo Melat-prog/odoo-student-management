@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View for AI Learning Assistant Wizard -->
+    <record id="view_ai_learning_assistant_wizard_form" model="ir.ui.view">
+        <field name="name">ai.learning.assistant.wizard.form</field>
+        <field name="model">ai.learning.assistant.wizard</field>
+        <field name="arch" type="xml">
+            <form string="AI Learning Assistant Wizard">
+                <header>
+                    <button name="action_generate_output" type="object" string="Generate Output" class="btn-primary"/>
+                    <button name="action_save_to_record" type="object" string="Save to Record" class="btn-success"/>
+                </header>
+                <sheet>
+                    <field name="res_model" invisible="1"/>
+                    <field name="res_id" invisible="1"/>
+                    <div class="oe_title">
+                        <label for="task_title"/>
+                        <h1><field name="task_title" placeholder="e.g. Summarize Chapter 4"/></h1>
+                    </div>
+                    <group>
+                        <group string="Source Material">
+                            <field name="source_material_id" options="{'no_create': True}"/>
+                            <field name="file_attachment" filename="file_name"/>
+                            <field name="file_name" invisible="1"/>
+                            <field name="custom_text" placeholder="Paste text here or leave blank to use attached document..."/>
+                        </group>
+                        <group string="AI Configuration">
+                            <field name="ai_action" widget="radio"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Generated Result">
+                            <field name="generated_result"
+                                   widget="html"
+                                   readonly="1"
+                                   options="{'sanitize': False, 'sanitize-tags': False}"
+                                   class="o_ai_generated_content"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for AI Learning Assistant Wizard -->
+    <record id="action_ai_learning_assistant_wizard" model="ir.actions.act_window">
+        <field name="name">AI Learning Assistant</field>
+        <field name="res_model">ai.learning.assistant.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_ai_learning_assistant_wizard_form"/>
+        <field name="target">new</field>
+        <field name="context">{'form_view_initial_mode': 'edit'}</field>
+    </record>
+</odoo>

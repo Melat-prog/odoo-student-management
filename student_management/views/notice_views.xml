@@ -1,0 +1,56 @@
+<odoo>
+    <record id="view_notice_list" model="ir.ui.view">
+        <field name="name">student.notice.list</field>
+        <field name="model">student.notice</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="priority == '2'" decoration-info="priority == '1'">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="target_audience" widget="badge"/>
+                <field name="expiry_date" widget="remaining_days"/>
+                <field name="priority" widget="priority"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_notice_form" model="ir.ui.view">
+        <field name="name">student.notice.form</field>
+        <field name="model">student.notice</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Notice Title"/>
+                        <h1><field name="name" placeholder="e.g. ICT Club Meeting Postponed"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="expiry_date"/>
+                        </group>
+                        <group>
+                            <field name="target_audience"/>
+                            <field name="priority" widget="priority"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Content" name="content">
+                            <field name="content" placeholder="Type your announcement here..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_notice" model="ir.actions.act_window">
+        <field name="name">Notice Board</field>
+        <field name="res_model">student.notice</field>
+        <field name="view_mode">list,form</field>
+    </record>
+<menuitem id="menu_notice_root"
+              name="Notice Board"
+              parent="student_menu_root" 
+              action="action_notice"
+              sequence="40"/>
+</odoo>

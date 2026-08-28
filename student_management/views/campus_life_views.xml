@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_campus_life_activity_list" model="ir.ui.view">
+        <field name="name">campus.life.activity.list</field>
+        <field name="model">campus.life.activity</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="is_published"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_campus_life_activity_form" model="ir.ui.view">
+        <field name="name">campus.life.activity.form</field>
+        <field name="model">campus.life.activity</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="is_published" widget="boolean_button" options='{"terminology": "archive"}'/>
+                </header>
+                <sheet>
+                    <field name="cover_image" widget="image" class="oe_avatar" options="{'preview_image': 'cover_image', 'size': [90, 90]}"/>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" placeholder="Activity Title"/></h1>
+                    </div>
+                    <group>
+                        <group string="Details">
+                            <field name="category"/>
+                            <field name="video_url" widget="url"/>
+                            <field name="website_url" widget="url"/>
+                        </group>
+                        <group string="Summary">
+                            <field name="summary" placeholder="Brief teaser description..."/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Full Description" name="description">
+                            <field name="description"/>
+                        </page>
+                        <page string="Gallery" name="gallery">
+                            <group>
+                                <group>
+                                    <field name="gallery_image_1" widget="image"/>
+                                    <field name="gallery_image_2" widget="image"/>
+                                </group>
+                                <group>
+                                    <field name="gallery_image_3" widget="image"/>
+                                    <field name="gallery_image_4" widget="image"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_campus_life_activity" model="ir.actions.act_window">
+        <field name="name">Campus Life Activities</field>
+        <field name="res_model">campus.life.activity</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_campus_life_root" name="Campus Life" parent="student_menu_root" sequence="35"/>
+    <menuitem id="menu_campus_life_activities" name="Activities" parent="menu_campus_life_root" action="action_campus_life_activity" sequence="10"/>
+</odoo>

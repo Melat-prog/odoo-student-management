@@ -3,32 +3,38 @@ from odoo import models, fields, api
 class TeacherAssignment(models.Model):
     _name = 'teacher.assignment'
     _description = 'Teacher Assignment'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char(required=True)
-    teacher_id = fields.Many2one('teacher.teacher', string="Teacher", required=True)
+    name = fields.Char(required=True, string="Assignment Title")
+    
+    # FIXED: Correct comodel name
+    teacher_id = fields.Many2one('student.teacher', string="Teacher", required=True)
+    
     subject_id = fields.Many2one('student.subject', string="Subject")
     class_id = fields.Many2one('student.class', string="Class")
     attachment_ids = fields.Many2many('ir.attachment', string="Documents")
     description = fields.Text()
     submission_count = fields.Integer(compute='_compute_submission_count', string="Submissions")
 
+    issue_date = fields.Date(string="Issue Date", default=fields.Date.context_today)
+    due_date = fields.Date(string="Due Date", required=True)
+    
     state = fields.Selection([
         ('new', 'New'),
         ('in_progress', 'In Progress'),
         ('completed', 'Completed')
-    ], default='new')
-    
-    status = fields.Selection([
-        ('draft', 'Draft'),
-        ('ongoing', 'Ongoing'),
-        ('done', 'Done')
-    ], default='draft', string="Status")
+    ], default='new', tracking=True)
 
+    @api.depends('name') # Added basic dependency to ensure it triggers
     def _compute_submission_count(self):
         for record in self:
-            record.submission_count = self.env['student.submission'].search_count([
-                ('assignment_id', '=', record.id)
-            ])
+            # We use a try/except in case student.submission isn't loaded yet
+            try:
+                record.submission_count = self.env['student.submission'].search_count([
+                    ('assignment_id', '=', record.id)
+                ])
+            except:
+                record.submission_count = 0
 
     def action_view_submissions(self):
         return {
